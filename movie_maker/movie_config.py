@@ -4,11 +4,11 @@ from typing import List
 
 
 class MovieConfig:
-    def __init__(self, url, width: int = 1280, height: int = 720, limit_height: int = 50000, scroll_each: int = 200,
+    def __init__(self, url: str = '', width: int = 1280, height: int = 720, limit_height: int = 50000, scroll_each: int = 200,
                  targets: List[str] = None):
         self.scroll_height = None
         self.url = url
-        self.domain = url.split("/")[2]
+        if url != '': self.domain = url.split("/")[2]
         self.width = width
         self.height = height
         self.limit_height = limit_height

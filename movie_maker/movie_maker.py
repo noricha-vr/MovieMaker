@@ -19,7 +19,7 @@ class MovieMaker:
         :return None:
         """
         from moviepy.editor import ImageSequenceClip
-        clip = ImageSequenceClip(file_paths, fps=1)
+        clip = ImageSequenceClip(str(file_paths), fps=1)
         clip.write_videofile(str(movie_path), fps=1)
 
     def create_movie(self):
