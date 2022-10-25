@@ -2,17 +2,18 @@
 
 This project is convert web pages, images, PDFs, etc. to videos for VRChat
 
-## Setup
+## Installation
 
 ```bash
-pip install MovieMaker
+pip install git+https://github.com/noricha-vr/MovieMaker
 ```
 
-or
+## Setup development environment
 
 ```bash
-git clone git+https://github.com/noricha-vr/MovieMaker.git
+git clone https://github.com/noricha-vr/MovieMaker.git
 cd MovieMaker
+pip install -r requirements.txt
 docker build -t movie_maker .
 ```
 
