@@ -1,2 +1,9 @@
+/src/image/
+/src/movie/
+/src/html/
+/src/project/
+
 /tests/image/
 /tests/movie/
+/tests/html/
+/tests/project/
