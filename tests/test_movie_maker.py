@@ -22,9 +22,9 @@ class TestMovieMaker:
         # Change sizes
         ("https://gigazine.net/news/20221012-geforce-rtx-4090-benchmark/", 2000, 2000, 1000, 100, 6),  # Limit test
     ])
-    def test_create_site_movie(self, url, width, height, max_height, scroll_each, length):
+    def test_create_site_movie(self, url, width, height, limit_height, scroll_each, length):
         # Create movie.
-        movie_config = MovieConfig(url, width, height, max_height, scroll_each)
+        movie_config = MovieConfig(url, width, height, limit_height, scroll_each)
         movie_maker = MovieMaker(movie_config)
         movie_maker.create_movie()
         # Check movie.
