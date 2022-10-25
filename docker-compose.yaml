@@ -1,0 +1,7 @@
+version: '3'
+services:
+  movie_maker:
+    container_name: 'movie_maker'
+    image: 'movie_maker'
+    volumes:
+      - .:/app
