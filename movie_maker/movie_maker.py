@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import List
-from github_downloader import GithubDownloader
-from source_converter import SourceConverter
+from source_converter import SourceConverter,GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import MovieConfig
 
