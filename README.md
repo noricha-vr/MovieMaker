@@ -1,54 +1,50 @@
-# screen_capture
+# MovieMaker
 
-This project is for displaying web pages, images and desktop on the VRChat video player.
-Also, in the future I would like to display input images, pdfs and the user's desktop.
+This project is convert web pages, images, PDFs, etc. to videos for VRChat
 
 ## Setup
 
 ```bash
-git clone git+https://github.com/noricha-vr/screen_capture.git
-cd screen_capture
-docker build -t screen_capture .
-docker network create my_network
-docker-compose up
+pip install MovieMaker
 ```
 
-When you stop the container, you can use the following command.
+or
 
 ```bash
-docker-compose down
+git clone git+https://github.com/noricha-vr/MovieMaker.git
+cd MovieMaker
+docker build -t movie_maker .
 ```
-
-or `ctrl + c`
-
-### Pycharm settings
-
-#### Run/Debug Configurations
-
-- Select: FastAPI
-- Path: absolute path to `main.py`
-- Uvicorn options: --reload --host=0.0.0.0 --port=8080
-
-#### Interpreter settings
-
-1. Select `docker-compose` interpreter
-2. Select `docker-compose.yaml` file
-3. Select `screen_capture` service
-
-### VSCode settings
 
 ## Usage
 
-1. Open the http://0.0.0.0:8080/ on your browser.
-2. Enter the URL of the web page you want to display in VRChat video player.
-3. Copy the URL, then paste it into the VRChat video player.
-4. Enjoy!
+From web page URL.
 
-## Useful docker commands
+```python
+from movie_maker import MovieMaker, MovieConfig
 
-```bash
-docker build -t screen_capture .
-docker-compose up
-docker exec -it screen_capture bash
-docker-compose down
+# Please set the url, browser size and scroll.
+url = "https://www.google.com/"
+width = 1280
+height = 720
+limit_height = 50000
+scroll_each = 200
+movie_config = MovieConfig(url, width, height, limit_height, scroll_each)
+
+# create movie
+movie_maker = MovieMaker(movie_config)
+movie_maker.create_movie() 
+```
+
+From GitHub repository.
+
+```python
+from movie_maker import MovieMaker, MovieConfig
+
+# Please set the repository URL and what types of file you want.
+url = 'https://github.com/noricha-vr/source_converter'
+targets = ['*.md', '*.py', ]
+movie_config = MovieConfig(url, targets=targets)
+# create movie
+MovieMaker(movie_config).create_github_movie()
 ```
