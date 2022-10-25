@@ -1,6 +1,6 @@
 import time
 from typing import List
-from browsers.base_browser import BaseBrowser
+from movie_maker.browser import BaseBrowser
 
 
 class GeneralBrowser(BaseBrowser):

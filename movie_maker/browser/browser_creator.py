@@ -1,9 +1,9 @@
-from browsers.base_browser import BaseBrowser
-from browsers.general_browser import GeneralBrowser
-from browsers.twitter_browser import TwitterBrowser
+from movie_maker.browser.base_browser import BaseBrowser
+from movie_maker.browser.general_browser import GeneralBrowser
+from movie_maker.browser.twitter_browser import TwitterBrowser
 
 # Which is better set params to constructor or create_browser?
-from movie_config import MovieConfig
+from movie_maker import MovieConfig
 
 
 class BrowserCreator:

@@ -2,8 +2,8 @@ from pathlib import Path
 from typing import List
 from github_downloader import GithubDownloader
 from source_converter import SourceConverter
-from browser_creator import BrowserCreator
-from movie_config import MovieConfig
+from movie_maker.browser import BrowserCreator
+from movie_maker import MovieConfig
 
 
 class MovieMaker:

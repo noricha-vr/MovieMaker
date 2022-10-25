@@ -1,10 +1,6 @@
 import hashlib
-import logging.config
 from pathlib import Path
 from typing import List
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger(__name__)
 
 
 class MovieConfig:
@@ -36,7 +32,6 @@ class MovieConfig:
         if self.height > limit_height: self.height = limit_height
         if self.limit_height > limit_max_height: self.limit_height = limit_max_height
         if self.scroll_each < limit_minimum_scroll: self.scroll_each = limit_minimum_scroll
-        logger.info(f"MovieConfig: {self.__dict__}")
 
     def set_scroll_height(self, page_height: int) -> None:
         """

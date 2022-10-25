@@ -1,21 +1,17 @@
 import os
-import shutil
-
-from movie_config import MovieConfig
-from movie_maker import MovieMaker
-import pytest
-from moviepy import editor
 import glob
+import pytest
+import shutil
+from moviepy import editor
+from movie_maker import MovieConfig, MovieMaker
 
 # Rest image and movie folder.
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
 
 
-
-
 class TestMovieMaker:
-    @pytest.mark.parametrize(('url', 'width', 'height', 'max_height', 'scroll_each', 'length'), [
+    @pytest.mark.parametrize(('url', 'width', 'height', 'limit_height', 'scroll_each', 'length'), [
         ("https://www.google.com", 1280, 720, 5000, 100, 1),  # No scroll page test.
         ("https://twitter.com/search?q=vrchat&src=typed_query", 1280, 720, 5000, 100, 26),  # Twitter test.
         ("https://forest.watch.impress.co.jp/docs/serial/sspcgame/1436345.html", 720, 1280, 5000, 500, 11),

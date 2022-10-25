@@ -1,8 +1,5 @@
 import hashlib
 from pathlib import Path
-import zipfile
-
-import requests
 
 
 class FileHandler:

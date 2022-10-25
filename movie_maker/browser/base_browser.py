@@ -1,12 +1,10 @@
+import abc
 import os
 import time
 from pathlib import Path
 from typing import List
-
-from headless_driver import create_headless_chromedriver
-import abc
-
-from movie_config import MovieConfig
+from movie_maker.headless_driver import create_headless_chromedriver
+from movie_maker import MovieConfig
 
 
 class BaseBrowser(metaclass=abc.ABCMeta):

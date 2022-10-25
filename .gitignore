@@ -1,8 +1,8 @@
-/src/image/
-/src/movie/
-/src/html/
-/src/project/
-/src/MovieMaker.egg-info/
+/movie_maker/image/
+/movie_maker/movie/
+/movie_maker/html/
+/movie_maker/project/
+/movie_maker/MovieMaker.egg-info/
 
 /tests/image/
 /tests/movie/
