@@ -1,19 +1,21 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 
 setup(
     name="MovieMaker",
     version="0.0.1",
-    install_requires=["src", ],
-    # extras_require={
-    #     "develop": []
-    # },
-    # entry_points={
-    #     "console_scripts": [
-    #         "foo = src.module_name:func_name",
-    #         "foo_dev = package_name.module_name:func_name [develop]"
-    #     ],
-    #     "gui_scripts": [
-    #         "bar = gui_package_name.gui_module_name:gui_func_name"
-    #     ]
-    # }
+    license='MIT',
+    author="Noricha",
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    install_requires=[
+        'Jinja2==2.11.3',
+        'moviepy==1.0.3',
+        'selenium==4.5.0',
+        'webdriver-manager==3.8.4',
+        'source-converter==0.1.8',
+    ],
+    url='https://github.com/noricha-vr/MovieMaker',
+    extras_require={
+        "develop": ['pytest']
+    },
 )
