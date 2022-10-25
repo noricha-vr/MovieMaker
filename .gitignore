@@ -2,8 +2,10 @@
 /src/movie/
 /src/html/
 /src/project/
+/src/MovieMaker.egg-info/
 
 /tests/image/
 /tests/movie/
 /tests/html/
 /tests/project/
+
