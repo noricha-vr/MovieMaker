@@ -3,6 +3,7 @@ from typing import List
 from source_converter import SourceConverter,GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import MovieConfig
+from moviepy.editor import ImageSequenceClip
 
 
 class MovieMaker:
@@ -18,8 +19,7 @@ class MovieMaker:
         :param movie_path:
         :return None:
         """
-        from moviepy.editor import ImageSequenceClip
-        clip = ImageSequenceClip(str(file_paths), fps=1)
+        clip = ImageSequenceClip(file_paths, fps=1)
         clip.write_videofile(str(movie_path), fps=1)
 
     def create_movie(self):
