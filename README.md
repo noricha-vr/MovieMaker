@@ -5,7 +5,7 @@ This project is convert web pages, images, PDFs, etc. to videos for VRChat
 ## Installation
 
 ```bash
-pip install git+https://github.com/noricha-vr/MovieMaker
+pip install vrc-movie-maker
 ```
 
 ## Setup development environment
