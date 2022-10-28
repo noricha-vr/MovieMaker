@@ -10,7 +10,6 @@ class TwitterBrowser(BaseBrowser):
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
         :return: image_file_paths:
         """
-        time.sleep(6)
         file_paths = []
         # Take screenshots
         for px in range(0, self.movie_config.max_page_height, self.movie_config.scroll_each):
@@ -20,3 +19,10 @@ class TwitterBrowser(BaseBrowser):
             file_paths.append(file_path)
         self.driver.quit()
         return file_paths
+
+    def wait(self) -> None:
+        """
+        Wait for the javascript rendering.
+        :return: None
+        """
+        time.sleep(6)
