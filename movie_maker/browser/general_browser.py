@@ -15,12 +15,13 @@ class GeneralBrowser(BaseBrowser):
         window_bottom_height = self.get_window_bottom_height()
         page_height = self.get_page_height()
         scroll_to = self.movie_config.scroll_each
-        while window_bottom_height <= self.movie_config.max_page_height:
+        while window_bottom_height <= page_height:
             # Take screenshot
             file_path = f"{self.image_folder_path}/{self._get_page_no()}_{window_bottom_height}.png"
             self.driver.save_screenshot(file_path)
             file_paths.append(file_path)
-            if window_bottom_height == page_height:
+            if self.movie_config.max_page_height < window_bottom_height or \
+                    window_bottom_height == page_height:
                 break
             # Scroll and update window_bottom_height
             self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
