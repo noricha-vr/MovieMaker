@@ -51,7 +51,7 @@ class MovieMaker:
         html_file_path = source_converter.project_to_html(project_path, self.browser_config.targets)
         image_paths = []
         browser = None
-        # Take screenshots
+        # Take screenshots multi pages.
         try:
             browser = BrowserCreator(self.browser_config).create_browser()
             for html_path in html_file_path:
