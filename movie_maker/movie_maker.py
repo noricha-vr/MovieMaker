@@ -9,7 +9,7 @@ from moviepy.editor import ImageSequenceClip
 class MovieMaker:
 
     def __init__(self, movie_config: BrowserConfig, ):
-        self.movie_config = movie_config
+        self.browser_config = movie_config
 
     @staticmethod
     def image_to_movie(file_paths: List[str], movie_path: str) -> None:
@@ -27,40 +27,40 @@ class MovieMaker:
         Create a movie from the given url.
         :return:
         """
-        browser = BrowserCreator(self.movie_config).create_browser()
-        browser.open(self.movie_config.url)
+        browser = None
         try:
+            browser = BrowserCreator(self.browser_config).create_browser()
+            browser.open(self.browser_config.url)
             image_paths = browser.take_screenshots()
-            browser.driver.quit()
-            # Create a movie
         except Exception as e:
-            browser.driver.quit()
-            print(e)
             raise e
-        self.image_to_movie(image_paths, self.movie_config.movie_path)
+        finally:
+            browser.driver.quit()
+        self.image_to_movie(image_paths, self.browser_config.movie_path)
 
     def create_github_movie(self) -> Path:
         """
         Create a movie from the given GitHub url.
         """
         # download source code
-        project_name = self.movie_config.url.split("/")[4]
-        folder_path = GithubDownloader.download_github_archive_and_unzip_to_file(self.movie_config.url, project_name)
+        project_name = self.browser_config.url.split("/")[4]
+        folder_path = GithubDownloader.download_github_archive_and_unzip_to_file(self.browser_config.url, project_name)
         project_path = GithubDownloader.rename_project(folder_path, project_name)
         # Convert the source codes to html files.
         source_converter = SourceConverter('default')
-        html_file_path = source_converter.project_to_html(project_path, self.movie_config.targets)
-        # Take screenshots
-        browser = BrowserCreator(self.movie_config).create_browser()
+        html_file_path = source_converter.project_to_html(project_path, self.browser_config.targets)
         image_paths = []
-        for html_path in html_file_path:
-            browser.open(f"file://{html_path.absolute()}")
-            try:
+        browser = None
+        # Take screenshots
+        try:
+            browser = BrowserCreator(self.browser_config).create_browser()
+            for html_path in html_file_path:
+                browser.open(f"file://{html_path.absolute()}")
                 image_paths.extend(browser.take_screenshots())
-            except Exception as e:
-                browser.driver.quit()
-                print(e)
-                raise e
-        browser.driver.quit()
-        self.image_to_movie(image_paths, self.movie_config.movie_path)
-        return self.movie_config.movie_path
+        except Exception as e:
+            browser.driver.quit()
+            raise e
+        finally:
+            browser.driver.quit()
+        self.image_to_movie(image_paths, self.browser_config.movie_path)
+        return self.browser_config.movie_path
