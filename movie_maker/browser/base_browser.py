@@ -11,14 +11,14 @@ class BaseBrowser(metaclass=abc.ABCMeta):
 
     def __init__(self, browser_config: BrowserConfig):
         self.movie_config = browser_config
-        self.image_folder_path = self.create_folder()
+        self.image_folder_path = self.create_image_folder()
         self.driver = create_headless_chromedriver(
             browser_config.width, browser_config.height, browser_config.driver_path)
         self.driver.implicitly_wait(10)
         self.page_no = 0
 
     @staticmethod
-    def create_folder() -> Path:
+    def create_image_folder() -> Path:
         """
         Create folder named by timestamp
         :return: Path object
@@ -28,12 +28,24 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         os.makedirs(image_folder_path)
         return Path(image_folder_path)
 
+    def delete_image_folder(self) -> None:
+        """
+        Delete image folder.
+        """
+        os.rmdir(self.image_folder_path)
+
     def set_scroll_height(self) -> None:
         """
         Calculate scroll height.
         """
         page_height = self.driver.execute_script("return document.body.scrollHeight")
         self.movie_config.set_scroll_height(page_height)
+
+    def update_page_height(self) -> None:
+        """
+        Update page height.
+        """
+        self.page_height = self.driver.execute_script("document.body.style.height = 'auto';")
 
     def _get_page_no(self) -> str:
         """
@@ -54,12 +66,3 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
         :return: image_file_paths:
         """
-
-    # Is this method necessary?
-    # @abc.abstractmethod
-    # def take_screenshots(self, urls: List[str]) -> List[str]:
-    #     """
-    #     Take a screenshot of the given URLs returns image_file_paths.
-    #     :param urls:
-    #     :return: image_file_paths:
-    #     """
