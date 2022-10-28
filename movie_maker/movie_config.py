@@ -9,13 +9,13 @@ class BrowserConfig:
     limit_width = 1920
     limit_height = 1920
 
-    def __init__(self, url: str = '', width: int = 1280, height: int = 720, limit_height: int = 50000, scroll_each: int = 200,
-                 targets: List[str] = None):
+    def __init__(self, url: str = '', width: int = 1280, height: int = 720,
+                 max_page_height: int = 50000, scroll_each: int = 200, targets: List[str] = None):
         self.url = url
         if url != '': self.domain = url.split("/")[2]
         self.width = width
         self.height = height
-        self.max_page_height = limit_height
+        self.max_page_height = max_page_height
         self.scroll_each = scroll_each
         self.targets = targets
         self.params_hash = self.params_to_hash()
