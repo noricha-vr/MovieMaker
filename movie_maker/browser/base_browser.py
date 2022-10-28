@@ -34,18 +34,17 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         os.rmdir(self.image_folder_path)
 
-    def set_scroll_height(self) -> None:
+    def get_page_height(self) -> int:
         """
-        Calculate scroll height.
+        Get page height.
         """
-        page_height = self.driver.execute_script("return document.body.scrollHeight")
-        self.movie_config.set_scroll_height(page_height)
+        return self.driver.execute_script("return document.body.scrollHeight")
 
-    def update_page_height(self) -> None:
+    def get_window_bottom_height(self) -> int:
         """
-        Update page height.
+        Get window bottom height of page.
         """
-        self.page_height = self.driver.execute_script("document.body.style.height = 'auto';")
+        return self.driver.execute_script("return window.innerHeight + window.scrollY")
 
     def _get_page_no(self) -> str:
         """
@@ -58,7 +57,6 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """open url and set scroll_height"""
         print(f"Open url: {url}")
         self.driver.get(url)
-        self.set_scroll_height()
 
     @abc.abstractmethod
     def take_screenshots(self) -> List[str]:
