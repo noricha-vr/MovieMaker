@@ -1,4 +1,4 @@
-from movie_maker.movie_config import BrowserConfig
+from movie_maker.browser_config import BrowserConfig
 from movie_maker.browser import BaseBrowser
 from movie_maker.browser.general_browser import GeneralBrowser
 from movie_maker.browser.twitter_browser import TwitterBrowser
