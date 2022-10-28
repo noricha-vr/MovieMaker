@@ -1,11 +1,13 @@
 import abc
 import os
 import time
+import logging
 from pathlib import Path
 from typing import List
 from movie_maker.headless_driver import create_headless_chromedriver
 from movie_maker import BrowserConfig
 
+logger = logging.getLogger(__name__)
 
 class BaseBrowser(metaclass=abc.ABCMeta):
 
@@ -55,12 +57,19 @@ class BaseBrowser(metaclass=abc.ABCMeta):
 
     def open(self, url: str) -> None:
         """open url and set scroll_height"""
-        print(f"Open url: {url}")
+        logger.info(f"Open url: {url}")
         self.driver.get(url)
+        self.wait()
 
     @abc.abstractmethod
     def take_screenshots(self) -> List[str]:
         """
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
         :return: image_file_paths:
+        """
+
+    @abc.abstractmethod
+    def wait(self) -> None:
+        """
+        Wait for page loading.
         """
