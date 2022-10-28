@@ -61,7 +61,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         self.set_scroll_height()
 
     @abc.abstractmethod
-    def take_screenshot(self) -> List[str]:
+    def take_screenshots(self) -> List[str]:
         """
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
         :return: image_file_paths:

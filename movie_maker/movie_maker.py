@@ -30,7 +30,7 @@ class MovieMaker:
         browser = BrowserCreator(self.movie_config).create_browser()
         browser.open(self.movie_config.url)
         try:
-            image_paths = browser.take_screenshot()
+            image_paths = browser.take_screenshots()
             browser.driver.quit()
             # Create a movie
         except Exception as e:
@@ -56,7 +56,7 @@ class MovieMaker:
         for html_path in html_file_path:
             browser.open(f"file://{html_path.absolute()}")
             try:
-                image_paths.extend(browser.take_screenshot())
+                image_paths.extend(browser.take_screenshots())
             except Exception as e:
                 browser.driver.quit()
                 print(e)

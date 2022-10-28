@@ -5,7 +5,7 @@ from movie_maker.browser import BaseBrowser
 
 class GeneralBrowser(BaseBrowser):
 
-    def take_screenshot(self) -> List[str]:
+    def take_screenshots(self) -> List[str]:
         """
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
         :return: image_file_paths:
@@ -20,7 +20,7 @@ class GeneralBrowser(BaseBrowser):
         self.page_no += 1
         return file_paths
 
-    def take_screenshots(self, urls: List[str]) -> List[str]:
+    def take_multi_page_screenshots(self, urls: List[str]) -> List[str]:
         """
         Take a screenshot of the given URLs scrolling each px and returns image_file_paths.
         :return: image_file_paths:
@@ -30,5 +30,5 @@ class GeneralBrowser(BaseBrowser):
             print(f"Take screenshot: {i + 1}/{len(urls)}: {url}")
             self.driver.get(url)
             # time.sleep(5)
-            file_paths.extend(self.take_screenshot())
+            file_paths.extend(self.take_screenshots())
         return file_paths

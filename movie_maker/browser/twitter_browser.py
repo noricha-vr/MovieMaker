@@ -5,7 +5,7 @@ import time
 
 class TwitterBrowser(BaseBrowser):
 
-    def take_screenshot(self) -> List[str]:
+    def take_screenshots(self) -> List[str]:
         """
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
         :return: image_file_paths:
