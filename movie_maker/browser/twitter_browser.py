@@ -11,7 +11,6 @@ class TwitterBrowser(BaseBrowser):
         :return: image_file_paths:
         """
         time.sleep(6)
-        self.set_scroll_height()
         file_paths = []
         # Take screenshots
         for px in range(0, self.movie_config.max_page_height, self.movie_config.scroll_each):
