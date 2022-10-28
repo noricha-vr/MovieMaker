@@ -3,7 +3,7 @@ import glob
 import pytest
 import shutil
 from moviepy import editor
-from movie_maker import MovieConfig, MovieMaker
+from movie_maker import BrowserConfig, MovieMaker
 
 # Rest image and movie folder.
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
@@ -20,7 +20,7 @@ class TestMovieMaker:
     ])
     def test_create_site_movie(self, url, width, height, limit_height, scroll_each, length):
         # Create movie.
-        movie_config = MovieConfig(url, width, height, limit_height, scroll_each)
+        movie_config = BrowserConfig(url, width, height, limit_height, scroll_each)
         movie_maker = MovieMaker(movie_config)
         movie_maker.create_movie()
         # Check movie.
@@ -35,7 +35,7 @@ class TestMovieMaker:
         ('https://github.com/noricha-vr/source_converter', ['*.md', '*.py', ]),
     ])
     def test_create_github_movie(self, url, targets):
-        movie_config = MovieConfig(url, targets=targets)
+        movie_config = BrowserConfig(url, targets=targets)
         MovieMaker(movie_config).create_github_movie()
         movie = editor.VideoFileClip(str(movie_config.movie_path))
         assert movie.duration == 16.0

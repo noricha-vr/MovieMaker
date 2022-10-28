@@ -29,6 +29,6 @@ class GeneralBrowser(BaseBrowser):
         for i, url in enumerate(urls):
             print(f"Take screenshot: {i + 1}/{len(urls)}: {url}")
             self.driver.get(url)
-            time.sleep(5)
+            # time.sleep(5)
             file_paths.extend(self.take_screenshot())
         return file_paths

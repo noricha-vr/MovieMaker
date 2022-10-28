@@ -22,7 +22,7 @@ docker build -t movie_maker .
 From web page URL.
 
 ```python
-from movie_maker import MovieMaker, MovieConfig
+from movie_maker import MovieMaker, BrowserConfig
 
 # Please set the url, browser size and scroll.
 url = "https://www.google.com/"
@@ -30,7 +30,7 @@ width = 1280
 height = 720
 limit_height = 50000
 scroll_each = 200
-movie_config = MovieConfig(url, width, height, limit_height, scroll_each)
+movie_config = BrowserConfig(url, width, height, limit_height, scroll_each)
 
 # create movie
 movie_maker = MovieMaker(movie_config)
@@ -40,12 +40,12 @@ movie_maker.create_movie()
 From GitHub repository.
 
 ```python
-from movie_maker import MovieMaker, MovieConfig
+from movie_maker import MovieMaker, BrowserConfig
 
 # Please set the repository URL and what types of file you want.
 url = 'https://github.com/noricha-vr/source_converter'
 targets = ['*.md', '*.py', ]
-movie_config = MovieConfig(url, targets=targets)
+movie_config = BrowserConfig(url, targets=targets)
 # create movie
 MovieMaker(movie_config).create_github_movie()
 ```

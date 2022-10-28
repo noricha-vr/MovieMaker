@@ -4,15 +4,16 @@ import time
 from pathlib import Path
 from typing import List
 from movie_maker.headless_driver import create_headless_chromedriver
-from movie_maker import MovieConfig
+from movie_maker import BrowserConfig
 
 
 class BaseBrowser(metaclass=abc.ABCMeta):
 
-    def __init__(self, movie_config: MovieConfig):
-        self.movie_config = movie_config
+    def __init__(self, browser_config: BrowserConfig):
+        self.movie_config = browser_config
         self.image_folder_path = self.create_folder()
-        self.driver = create_headless_chromedriver(movie_config.width, movie_config.height, movie_config.driver_path)
+        self.driver = create_headless_chromedriver(
+            browser_config.width, browser_config.height, browser_config.driver_path)
         self.driver.implicitly_wait(10)
         self.page_no = 0
 

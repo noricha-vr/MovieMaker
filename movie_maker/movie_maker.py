@@ -2,13 +2,13 @@ from pathlib import Path
 from typing import List
 from source_converter import SourceConverter,GithubDownloader
 from movie_maker.browser import BrowserCreator
-from movie_maker import MovieConfig
+from movie_maker import BrowserConfig
 from moviepy.editor import ImageSequenceClip
 
 
 class MovieMaker:
 
-    def __init__(self, movie_config: MovieConfig, ):
+    def __init__(self, movie_config: BrowserConfig, ):
         self.movie_config = movie_config
 
     @staticmethod

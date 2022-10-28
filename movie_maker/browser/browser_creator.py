@@ -3,11 +3,11 @@ from movie_maker.browser.general_browser import GeneralBrowser
 from movie_maker.browser.twitter_browser import TwitterBrowser
 
 # Which is better set params to constructor or create_browser?
-from movie_maker import MovieConfig
+from movie_maker import BrowserConfig
 
 
 class BrowserCreator:
-    def __init__(self, movie_config: MovieConfig):
+    def __init__(self, movie_config: BrowserConfig):
         self.movie_config = movie_config
 
     def create_browser(self) -> BaseBrowser:
