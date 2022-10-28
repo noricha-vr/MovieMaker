@@ -2,7 +2,7 @@
 /movie_maker/movie/
 /movie_maker/html/
 /movie_maker/project/
-/movie_maker/MovieMaker.egg-info/
+/movie_maker/vrc_movie_maker.egg-info/
 /movie_maker.egg-info/
 
 /tests/image/
@@ -10,3 +10,4 @@
 /tests/html/
 /tests/project/
 
+/vrc_movie_maker.egg-info/
