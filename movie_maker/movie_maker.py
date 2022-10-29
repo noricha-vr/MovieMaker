@@ -20,7 +20,7 @@ class MovieMaker:
         :return None:
         """
         clip = ImageSequenceClip(file_paths, fps=1)
-        clip.write_videofile(str(movie_path), fps=1)
+        clip.write_videofile(str(movie_path), codec='libx264',audio=False, fps=1)
 
     def create_movie(self):
         """
