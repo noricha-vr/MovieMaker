@@ -19,8 +19,14 @@ class MovieMaker:
         :param movie_path:
         :return None:
         """
-        clip = ImageSequenceClip(file_paths, fps=1)
-        clip.write_videofile(str(movie_path), codec='libx264',audio=False, fps=1)
+        # clip = ImageSequenceClip(file_paths, fps=1)
+        # clip.write_videofile(str(movie_path), codec='h264',audio=False, fps=1)
+        import subprocess
+
+        subprocess.call(['ffmpeg', '-framerate', '1', '-i', f'{file_paths[0]}', '-c:v', 'libx264', '-r', '30', '-pix_fmt', 'yuv420p', f'{movie_path}'])
+        # convert images to video
+
+
 
     def create_movie(self):
         """
