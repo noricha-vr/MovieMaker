@@ -21,13 +21,10 @@ class MovieMaker:
         """
         image_dir = Path(file_paths[0]).parent
         import subprocess
-        #  -preset veryslow -movflags +faststart
         subprocess.call(['ffmpeg', '-framerate', '1','-pattern_type','glob', '-i', f'{image_dir}/*.png',
                          '-c:v', 'h264', '-r', '30', '-pix_fmt', 'yuv420p',
                          '-preset', 'veryslow', '-movflags', '+faststart',
                          f'{movie_path}'])
-        # convert images to video
-
 
 
     def create_movie(self):
