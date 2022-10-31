@@ -1,4 +1,4 @@
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 setup(
     name="vrc-movie-maker",
@@ -7,6 +7,7 @@ setup(
     author="Noricha",
     author_email="noricha.vr@gmail.com",
     packages=find_packages(exclude=['tests', 'tests.*']),
+    include_package_data=True,
     install_requires=[
         'Jinja2>=2.11.3',
         'moviepy>=1.0.3',
