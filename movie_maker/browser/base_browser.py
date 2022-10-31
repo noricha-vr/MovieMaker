@@ -4,10 +4,14 @@ import time
 import logging
 from pathlib import Path
 from typing import List
+
+from selenium.webdriver.common.by import By
+
 from movie_maker.headless_driver import create_headless_chromedriver
 from movie_maker import BrowserConfig
 
 logger = logging.getLogger(__name__)
+
 
 class BaseBrowser(metaclass=abc.ABCMeta):
 
@@ -36,22 +40,18 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         os.rmdir(self.image_folder_path)
 
-    def get_page_height(self) -> int:
-        """
-        Get page height.
-        """
-        page_height = 0
-        while page_height == 0:
-            page_height = self.driver.execute_script("return document.body.scrollHeight")
-            print(f'page_height: {page_height}')
-            logger.info(f'page_height: {page_height}')
-        return page_height
-
-    def get_window_bottom_height(self) -> int:
+    def _get_window_bottom_height(self) -> int:
         """
         Get window bottom height of page.
         """
         return self.driver.execute_script("return window.innerHeight + window.scrollY")
+
+    def _get_link_count(self) -> int:
+        """
+        Get links count.
+        :return: links count.
+        """
+        return len(self.driver.find_elements(By.XPATH, "//a"))
 
     def _get_page_no(self) -> str:
         """
@@ -68,24 +68,38 @@ class BaseBrowser(metaclass=abc.ABCMeta):
 
     def take_screenshots(self) -> List[str]:
         """
-        Take a screenshot of the given URL scrolling each px and returns image_file_paths.
-        If current window bottom height is over max_height, stop scrolling.
+        Scroll each px and Take a screenshot. Then returns image_file_paths.
+        Scroll will stop next patterns.
+        1. If current window bottom height is over max_height.
+        2. If link_count is over initial_link_count * link_increase_rate.
+        3. If link_count is decreased and over minimum_page_height.
         :return: image_file_paths:
         """
         file_paths = []
         window_bottom_height = 0
+        initial_link_count = self._get_link_count()
+        link_count = self._get_link_count()
+        link_increase_rate = 2
         scroll_to = self.browser_config.scroll_each
-        while window_bottom_height != self.get_window_bottom_height():
-            window_bottom_height = self.get_window_bottom_height()
+        while window_bottom_height != self._get_window_bottom_height():
+            window_bottom_height = self._get_window_bottom_height()
             # Take screenshot
             file_path = f"{self.image_folder_path}/{self._get_page_no()}_{window_bottom_height}.png"
             self.driver.save_screenshot(file_path)
             file_paths.append(file_path)
+            # If current window bottom height is over max_height.
             if self.browser_config.max_page_height < window_bottom_height:
                 break
-            # Scroll and update window_bottom_height
+            # If link count is over initial_link_count * link_increase_rate, stop scrolling.
+            if initial_link_count * link_increase_rate < link_count:
+                break
+            # Scroll and update scroll_to
             self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
             scroll_to += self.browser_config.scroll_each
+            # If link count is decreased and over minimum_page_height, stop scrolling.
+            if link_count < self._get_link_count() and self.browser_config.minimum_page_height < self._get_link_count():
+                break
+            link_count = self._get_link_count()
         self.page_no += 1
         return file_paths
 

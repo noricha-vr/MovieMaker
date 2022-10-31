@@ -12,7 +12,7 @@ for file in glob.glob("movie/*.mp4"): os.remove(file)
 
 class TestMovieMaker:
     @pytest.mark.parametrize(('url', 'width', 'height', 'limit_height', 'scroll_each', 'length'), [
-        ("http://abehiroshi.la.coocan.jp/",  1280, 720, 5000, 100, 1),  # No scroll page test.
+        ("http://abehiroshi.la.coocan.jp/", 1280, 720, 5000, 100, 1),  # No scroll page test.
         ("https://pypi.org/", 1280, 720, 5000, 100, 11),  # Language and scroll test.
         ("https://twitter.com/search?q=vrchat&src=typed_query", 1280, 720, 5000, 100, 23),  # Twitter test.
         ("https://twitter.com/noricha_vr/status/1586177429122711552", 1280, 720, 5000, 100, 13),  # Tweet test.
@@ -42,4 +42,4 @@ class TestMovieMaker:
         movie_config = BrowserConfig(url, targets=targets)
         MovieMaker(movie_config).create_github_movie()
         movie = editor.VideoFileClip(str(movie_config.movie_path))
-        assert movie.duration == 16.0
+        assert movie.duration == 16

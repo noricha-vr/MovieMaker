@@ -5,6 +5,7 @@ from typing import List
 
 class BrowserConfig:
     limit_minimum_scroll = 200
+    minimum_page_height = 3000
     limit_page_height = 100000
     limit_width = 1920
     limit_height = 1920
