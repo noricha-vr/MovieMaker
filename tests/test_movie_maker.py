@@ -20,7 +20,7 @@ class TestMovieMaker:
         # # Change sizes
         # ("https://gigazine.net/news/20221012-geforce-rtx-4090-benchmark/", 2000, 2000, 2000, 100, 2),  # Limit test
         # ("https://www.youtube.com/", 1280, 720, 5000, 100, 23),  # Youtube top page test
-        ("https://www.youtube.com/watch?v=h4wpnoht5y8", 1280, 720, 5000, 300, 19),  # YouTube movie test
+        ("https://www.youtube.com/watch?v=h4wpnoht5y8", 1280, 720, 5000, 300, 4),  # YouTube movie test
     ])
     def test_create_site_movie(self, url, width, height, limit_height, scroll_each, length):
         # Create movie.

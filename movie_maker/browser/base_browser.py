@@ -88,7 +88,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         while window_bottom_height != self._get_window_bottom_height():
             window_bottom_height = self._get_window_bottom_height()
             # Take screenshot
-            file_path = f"{self.image_folder_path}/{self._get_page_no()}_{window_bottom_height}.png"
+            file_path = f"{self.image_folder_path}/{self._get_page_no()}_{str(scroll_to).zfill(5)}.png"
             self.driver.save_screenshot(file_path)
             file_paths.append(file_path)
             # If current window bottom height is over max_height.
