@@ -28,7 +28,7 @@ class BrowserConfig:
         return hashlib.sha3_256(text).hexdigest()
 
     def apply_limit(self):
-        if self.width > self.limit_width: self.width = self.limit_width
-        if self.height > self.limit_height: self.height = self.limit_height
-        if self.limit_height > self.limit_page_height: self.limit_height = self.limit_page_height
+        if self.limit_width < self.width: self.width = self.limit_width
+        if self.limit_height < self.height: self.height = self.limit_height
+        if self.limit_page_height < self.max_page_height: self.max_page_height = self.limit_page_height
         if self.scroll_each < self.limit_minimum_scroll: self.scroll_each = self.limit_minimum_scroll

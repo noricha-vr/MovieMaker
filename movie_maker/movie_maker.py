@@ -3,7 +3,6 @@ from typing import List
 from source_converter import SourceConverter,GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig
-from moviepy.editor import ImageSequenceClip
 
 
 class MovieMaker:
@@ -22,7 +21,7 @@ class MovieMaker:
         image_dir = Path(file_paths[0]).parent
         import subprocess
         subprocess.call(['ffmpeg', '-framerate', '1','-pattern_type','glob', '-i', f'{image_dir}/*.png',
-                         '-c:v', 'h264', '-r', '30', '-pix_fmt', 'yuv420p',
+                         '-c:v', 'h264', '-pix_fmt', 'yuv420p',
                          '-preset', 'veryslow', '-movflags', '+faststart',
                          f'{movie_path}'])
 

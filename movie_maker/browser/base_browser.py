@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class BaseBrowser(metaclass=abc.ABCMeta):
 
     def __init__(self, browser_config: BrowserConfig):
-        self.movie_config = browser_config
+        self.browser_config = browser_config
         self.image_folder_path = self.create_image_folder()
         self.driver = create_headless_chromedriver(
             browser_config.width, browser_config.height, browser_config.driver_path)
@@ -40,7 +40,12 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         Get page height.
         """
-        return self.driver.execute_script("return document.body.scrollHeight")
+        page_height = 0
+        while page_height == 0:
+            page_height = self.driver.execute_script("return document.body.scrollHeight")
+            print(f'page_height: {page_height}')
+            logger.info(f'page_height: {page_height}')
+        return page_height
 
     def get_window_bottom_height(self) -> int:
         """
@@ -61,12 +66,28 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         self.driver.get(url)
         self.wait()
 
-    @abc.abstractmethod
     def take_screenshots(self) -> List[str]:
         """
         Take a screenshot of the given URL scrolling each px and returns image_file_paths.
+        If current window bottom height is over max_height, stop scrolling.
         :return: image_file_paths:
         """
+        file_paths = []
+        window_bottom_height = 0
+        scroll_to = self.browser_config.scroll_each
+        while window_bottom_height != self.get_window_bottom_height():
+            window_bottom_height = self.get_window_bottom_height()
+            # Take screenshot
+            file_path = f"{self.image_folder_path}/{self._get_page_no()}_{window_bottom_height}.png"
+            self.driver.save_screenshot(file_path)
+            file_paths.append(file_path)
+            if self.browser_config.max_page_height < window_bottom_height:
+                break
+            # Scroll and update window_bottom_height
+            self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
+            scroll_to += self.browser_config.scroll_each
+        self.page_no += 1
+        return file_paths
 
     @abc.abstractmethod
     def wait(self) -> None:
