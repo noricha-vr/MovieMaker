@@ -1,0 +1,11 @@
+{
+  "www.youtube.com": {
+    "https://www.youtube.com/watch\\?v=.*": {
+      "sleep": 1
+    },
+    "https://www.youtube.com/": {
+      "xpath_timeout": 10,
+      "xpath": "//*[@id='contents']"
+    }
+  }
+}

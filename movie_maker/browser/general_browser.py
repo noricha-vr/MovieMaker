@@ -17,6 +17,3 @@ class GeneralBrowser(BaseBrowser):
             # time.sleep(5)
             file_paths.extend(self.take_screenshots())
         return file_paths
-
-    def wait(self) -> None:
-        time.sleep(5)

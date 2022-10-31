@@ -1,11 +1,15 @@
 import abc
+import json
 import os
+import re
 import time
 import logging
 from pathlib import Path
 from typing import List
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from movie_maker.headless_driver import create_headless_chromedriver
 from movie_maker import BrowserConfig
@@ -103,8 +107,23 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         self.page_no += 1
         return file_paths
 
-    @abc.abstractmethod
     def wait(self) -> None:
         """
-        Wait for page loading.
+        Wait for page loading. Load ./site_settings.json and wait for each element or time.
         """
+
+        parent_path = Path(__file__).parent
+        with open(parent_path / "site_settings.json") as f:
+            site_settings = json.load(f)
+        site_setting = site_settings.get(self.browser_config.domain)
+        if site_setting is None: return
+        for pattern in site_setting:
+            match = re.match(pattern, self.driver.current_url)
+            if match is None: continue
+            params = site_setting[pattern]
+            if "xpath" in params and "xpath_timeout" in params:
+                WebDriverWait(self.driver, params['xpath_timeout']).until(
+                    EC.presence_of_element_located((By.XPATH, params["xpath"])))
+            elif "sleep" in params:
+                time.sleep(params["sleep"])
+            return
