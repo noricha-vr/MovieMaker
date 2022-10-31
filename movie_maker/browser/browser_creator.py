@@ -12,5 +12,5 @@ class BrowserCreator:
         """Select customized browser for each domain.
         :return: browser: customized browser
         """
-        if self.browser_config.domain == "twitter.com": return TwitterBrowser(self.browser_config)
+        # if self.browser_config.domain == "twitter.com": return TwitterBrowser(self.browser_config)
         return GeneralBrowser(self.browser_config)

@@ -12,15 +12,15 @@ for file in glob.glob("movie/*.mp4"): os.remove(file)
 
 class TestMovieMaker:
     @pytest.mark.parametrize(('url', 'width', 'height', 'limit_height', 'scroll_each', 'length'), [
-        # ("http://abehiroshi.la.coocan.jp/", 1280, 720, 5000, 100, 1),  # No scroll page test.
-        # ("https://pypi.org/", 1280, 720, 5000, 100, 11),  # Language and scroll test.
-        # ("https://twitter.com/search?q=vrchat&src=typed_query", 1280, 720, 5000, 100, 23),  # Twitter test.
-        # ("https://twitter.com/noricha_vr/status/1586177429122711552", 1280, 720, 5000, 100, 13),  # Tweet test.
-        # ("https://forest.watch.impress.co.jp/docs/serial/sspcgame/1436345.html", 720, 1280, 5000, 500, 9),
+        ("http://abehiroshi.la.coocan.jp/", 1280, 720, 5000, 100, 1),  # No scroll page test.
+        ("https://pypi.org/", 1280, 720, 5000, 100, 11),  # Language and scroll test.
+        ("https://twitter.com/search?q=vrchat&src=typed_query", 1280, 720, 5000, 100, 23),  # Twitter search test.
+        ("https://twitter.com/noricha_vr/status/1586177429122711552", 1280, 720, 5000, 100, 13),  # Tweet test.
+        ("https://forest.watch.impress.co.jp/docs/serial/sspcgame/1436345.html", 720, 1280, 5000, 500, 9),
         # # Change sizes
-        # ("https://gigazine.net/news/20221012-geforce-rtx-4090-benchmark/", 2000, 2000, 2000, 100, 2),  # Limit test
-        # ("https://www.youtube.com/", 1280, 720, 5000, 100, 23),  # Youtube top page test
-        ("https://www.youtube.com/watch?v=h4wpnoht5y8", 1280, 720, 5000, 300, 4),  # YouTube movie test
+        ("https://gigazine.net/news/20221012-geforce-rtx-4090-benchmark/", 2000, 2000, 2000, 100, 2),  # Limit test
+        ("https://www.youtube.com/", 1280, 720, 5000, 100, 23),  # Youtube top page test
+        ("https://www.youtube.com/watch?v=h4wpnoht5y8", 1280, 720, 5000, 300, 2),  # YouTube movie test
     ])
     def test_create_site_movie(self, url, width, height, limit_height, scroll_each, length):
         # Create movie.

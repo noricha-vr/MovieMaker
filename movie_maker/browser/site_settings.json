@@ -1,11 +1,18 @@
 {
   "www.youtube.com": {
     "https://www.youtube.com/watch\\?v=.*": {
-      "sleep": 1
-    },
-    "https://www.youtube.com/": {
       "xpath_timeout": 10,
-      "xpath": "//*[@id='contents']"
+      "xpath": "//*[@class='yt-simple-endpoint inline-block style-scope ytd-thumbnail']",
+      "sleep": 0.1
+    },
+    "https://www.youtube.com/$": {
+      "sleep": 0.1
+    }
+  },
+  "twitter.com": {
+    "https://twitter.com/.+": {
+      "xpath_timeout": 10,
+      "xpath": "//*[@data-testid='tweetText']"
     }
   }
 }

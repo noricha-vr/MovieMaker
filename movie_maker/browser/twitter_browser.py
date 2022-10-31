@@ -9,4 +9,4 @@ class TwitterBrowser(BaseBrowser):
         Wait for the javascript rendering.
         :return: None
         """
-        time.sleep(6)
+        pass

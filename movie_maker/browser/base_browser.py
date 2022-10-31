@@ -111,7 +111,6 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         Wait for page loading. Load ./site_settings.json and wait for each element or time.
         """
-
         parent_path = Path(__file__).parent
         with open(parent_path / "site_settings.json") as f:
             site_settings = json.load(f)
@@ -124,6 +123,6 @@ class BaseBrowser(metaclass=abc.ABCMeta):
             if "xpath" in params and "xpath_timeout" in params:
                 WebDriverWait(self.driver, params['xpath_timeout']).until(
                     EC.presence_of_element_located((By.XPATH, params["xpath"])))
-            elif "sleep" in params:
+            if "sleep" in params:
                 time.sleep(params["sleep"])
             return
