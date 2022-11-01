@@ -81,9 +81,6 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         file_paths = []
         window_bottom_height = 0
-        initial_link_count = self._get_link_count()
-        link_count = self._get_link_count()
-        link_increase_rate = 2
         scroll_to = self.browser_config.scroll_each
         while window_bottom_height != self._get_window_bottom_height():
             window_bottom_height = self._get_window_bottom_height()
@@ -94,16 +91,9 @@ class BaseBrowser(metaclass=abc.ABCMeta):
             # If current window bottom height is over max_height.
             if self.browser_config.max_page_height < window_bottom_height:
                 break
-            # If link count is over initial_link_count * link_increase_rate, stop scrolling.
-            if initial_link_count * link_increase_rate < link_count:
-                break
             # Scroll and update scroll_to
             self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
             scroll_to += self.browser_config.scroll_each
-            # If link count is decreased and over minimum_page_height, stop scrolling.
-            if link_count < self._get_link_count() and self.browser_config.minimum_page_height < self._get_link_count():
-                break
-            link_count = self._get_link_count()
         self.page_no += 1
         return file_paths
 
