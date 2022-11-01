@@ -25,7 +25,7 @@ class BrowserConfig:
         self.apply_limit()
 
     def params_to_hash(self):
-        text = f"{self.url}{self.width}{self.height}{self.limit_height}{self.scroll_each}{str(self.targets)}".encode()
+        text = f"{self.url}{self.width}{self.height}{self.max_page_height}{self.scroll_each}{str(self.targets)}".encode()
         return hashlib.sha3_256(text).hexdigest()
 
     def apply_limit(self):
