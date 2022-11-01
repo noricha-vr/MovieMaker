@@ -111,8 +111,11 @@ class BaseBrowser(metaclass=abc.ABCMeta):
             if match is None: continue
             params = site_setting[pattern]
             if "xpath" in params and "xpath_timeout" in params:
-                WebDriverWait(self.driver, params['xpath_timeout']).until(
-                    EC.presence_of_element_located((By.XPATH, params["xpath"])))
+                try:
+                    WebDriverWait(self.driver, params['xpath_timeout']).until(
+                        EC.presence_of_element_located((By.XPATH, params["xpath"])))
+                except Exception as e:
+                    logger.warning(e)
             if "sleep" in params:
                 time.sleep(params["sleep"])
             return
