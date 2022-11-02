@@ -70,7 +70,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         self.driver.get(url)
         self.wait()
 
-    def take_screenshots(self) -> List[str]:
+    def take_screenshots(self) -> Path:
         """
         Scroll each px and Take a screenshot. Then returns image_file_paths.
         Scroll will stop next patterns.
@@ -85,9 +85,9 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         while window_bottom_height != self._get_window_bottom_height():
             window_bottom_height = self._get_window_bottom_height()
             # Take screenshot
-            file_path = f"{self.image_folder_path}/{self._get_page_no()}_{str(scroll_to).zfill(5)}.png"
-            self.driver.save_screenshot(file_path)
-            file_paths.append(file_path)
+            image_path = self.image_folder_path / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}.png"
+            self.driver.save_screenshot(str(image_path.absolute()))
+            file_paths.append(image_path)
             # If current window bottom height is over max_height.
             if self.browser_config.max_page_height < window_bottom_height:
                 break
@@ -95,7 +95,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
             self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
             scroll_to += self.browser_config.scroll_each
         self.page_no += 1
-        return file_paths
+        return self.image_folder_path
 
     def wait(self) -> None:
         """

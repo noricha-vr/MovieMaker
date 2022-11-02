@@ -34,7 +34,7 @@ movie_config = BrowserConfig(url, width, height, limit_height, scroll_each)
 
 # create movie
 movie_maker = MovieMaker(movie_config)
-movie_maker.create_movie() 
+movie_maker.take_screenshots() 
 ```
 
 From GitHub repository.
