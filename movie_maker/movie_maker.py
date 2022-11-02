@@ -12,7 +12,7 @@ class MovieMaker:
         self.browser_config = movie_config
 
     @staticmethod
-    def image_to_movie(file_paths: List[str], movie_path: str, image_type: str = 'png') -> None:
+    def image_to_movie(file_paths: List[str], movie_path: str) -> None:
         """
         Create a movie from the given file paths.
         :param file_paths:
@@ -21,10 +21,9 @@ class MovieMaker:
         :return None:
         """
         image_dir = Path(file_paths[0]).parent
-        subprocess.call(['ffmpeg', '-framerate', '1', '-pattern_type', 'glob', '-i', f'{image_dir}/*.{image_type}',
+        subprocess.call(['ffmpeg', '-framerate', '1', '-pattern_type', 'glob', '-i', f'{image_dir}/*.png',
                          '-c:v', 'h264', '-pix_fmt', 'yuv420p',
-                         '-preset', 'veryslow', '-movflags', '+faststart', '-y'
-                                                                           f'{movie_path}'])
+                         '-preset', 'veryslow', '-movflags', '+faststart', f'{movie_path}'])
 
     def create_movie(self) -> None:
         """
