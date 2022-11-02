@@ -1,6 +1,7 @@
+import subprocess
 from pathlib import Path
 from typing import List
-from source_converter import SourceConverter,GithubDownloader
+from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig
 
@@ -11,22 +12,21 @@ class MovieMaker:
         self.browser_config = movie_config
 
     @staticmethod
-    def image_to_movie(file_paths: List[str], movie_path: str) -> None:
+    def image_to_movie(file_paths: List[str], movie_path: str, image_type: str = 'png') -> None:
         """
-        Create a movie from the given file paths. Each file is 2 seconds.
+        Create a movie from the given file paths.
         :param file_paths:
         :param movie_path:
+        :param file_type:
         :return None:
         """
         image_dir = Path(file_paths[0]).parent
-        import subprocess
-        subprocess.call(['ffmpeg', '-framerate', '1','-pattern_type','glob', '-i', f'{image_dir}/*.png',
+        subprocess.call(['ffmpeg', '-framerate', '1', '-pattern_type', 'glob', '-i', f'{image_dir}/*.{image_type}',
                          '-c:v', 'h264', '-pix_fmt', 'yuv420p',
-                         '-preset', 'veryslow', '-movflags', '+faststart',
-                         f'{movie_path}'])
+                         '-preset', 'veryslow', '-movflags', '+faststart', '-y'
+                                                                           f'{movie_path}'])
 
-
-    def create_movie(self):
+    def create_movie(self) -> None:
         """
         Create a movie from the given url.
         :return:
