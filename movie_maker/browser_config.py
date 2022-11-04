@@ -1,10 +1,46 @@
+import uuid
+from abc import ABCMeta, abstractmethod
 import hashlib
 from typing import List
 from dataclasses import dataclass
 
 
+class BaseConfig(metaclass=ABCMeta):
+
+    @abstractmethod
+    def __post_init__(self) -> None:
+        pass
+
+    @abstractmethod
+    def make_hash(self) -> str:
+        pass
+
+    @abstractmethod
+    def apply_limit(self) -> None:
+        pass
+
+
 @dataclass
-class BrowserConfig:
+class ImageConfig(BaseConfig):
+    width: int = 1280
+    height: int = 720
+    limit_width = 1920
+    limit_height = 1920
+
+    def __post_init__(self):
+        self.apply_limit()
+        self.hash = self.make_hash()
+
+    def make_hash(self) -> str:
+        return str(uuid.uuid4())
+
+    def apply_limit(self) -> None:
+        if self.limit_width < self.width: self.width = self.limit_width
+        if self.limit_height < self.height: self.height = self.limit_height
+
+
+@dataclass
+class BrowserConfig(BaseConfig):
     url: str = ''
     width: int = 1280
     height: int = 720
@@ -17,14 +53,14 @@ class BrowserConfig:
     limit_page_height = 100000
     limit_width = 1920
     limit_height = 1920
+    driver_path = None
 
     def __post_init__(self):
         if self.url != '': self.domain = self.url.split("/")[2]
-        self.driver_path = None
         self.apply_limit()
-        self.hash = self.params_to_hash()
+        self.hash = self.make_hash()
 
-    def params_to_hash(self) -> str:
+    def make_hash(self) -> str:
         text = f"{self.url}{self.width}{self.height}{self.max_page_height}{self.scroll_each}{str(self.targets)}".encode()
         return hashlib.sha3_256(text).hexdigest()
 
