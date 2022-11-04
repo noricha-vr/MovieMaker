@@ -1,8 +1,10 @@
 import os
 import glob
+from pathlib import Path
+
 import pytest
 import shutil
-from movie_maker import BrowserConfig, MovieMaker
+from movie_maker import BrowserConfig, MovieMaker, ImageConfig
 
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
@@ -47,4 +49,14 @@ class TestMovieMaker:
         image_dir = MovieMaker.take_screenshots_github_files(browser_config)
         assert len(list(image_dir.glob('*.png'))) == length, 'Image file counts does not match.'
         movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
+        assert movie_path.exists(), 'Movie file is not created.'
+
+    @pytest.mark.parametrize(('image_dir', 'length'), [
+        (Path('image/test_image'), 22),
+    ])
+    def test_create_movie_from_image(self, image_dir, length):
+        image_config = ImageConfig(image_dir)
+        image_dir = MovieMaker.format_images(image_config)
+        assert len(list(image_dir.glob("*"))) == length, 'Image file counts does not match.'
+        movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
         assert movie_path.exists(), 'Movie file is not created.'

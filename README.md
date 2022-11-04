@@ -48,3 +48,14 @@ browser_config = BrowserConfig(url, targets=targets)
 image_dir = MovieMaker.take_screenshots_github_files(browser_config)
 movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
 ```
+
+Create movie from local images.
+
+```python
+from movie_maker import MovieMaker, ImageConfig
+
+image_dir = 'path/to/image/dir'
+image_config = ImageConfig(image_dir)
+image_dir = MovieMaker.format_images(image_config)
+movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
+```

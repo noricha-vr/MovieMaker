@@ -25,10 +25,12 @@ class MovieMaker:
         movie_path = Path(f"{image_dir}/{file_name}.mp4")
         subprocess.call(['ffmpeg',
                          '-framerate', '1',
-                         '-pattern_type', 'glob', '-i', f'{image_dir}/*.{file_type}',  # convert image_dir/*.png
-                         '-c:v', 'h264', '-pix_fmt', 'yuv420p',
-                         '-preset', 'veryslow',
-                         '-movflags', '+faststart',
+                         # Get image_dir/*.file_type
+                         '-pattern_type', 'glob', '-i', f'{image_dir}/*.{file_type}',
+                         '-c:v', 'h264',  # codec
+                         '-pix_fmt', 'yuv420p',  # pixel format (color space)
+                         '-preset', 'veryslow',  # encoding speed
+                         '-tune', 'stillimage',  # tune for still image
                          f'{movie_path}'])
         return movie_path
 
@@ -65,6 +67,7 @@ class MovieMaker:
         # Convert the source codes to html files.
         source_converter = SourceConverter('default')
         html_file_path = source_converter.project_to_html(project_path, browser_config.targets)
+        # TODO Split to take local files screen shots.
         browser = None
         try:
             # Take multi files screenshots.
@@ -77,3 +80,24 @@ class MovieMaker:
         finally:
             browser.driver.quit()
         return image_dir
+
+    @staticmethod
+    def format_images(image_config) -> Path:
+        """
+        Get types of image paths. Resize image and convert to png.
+        Format images.
+        :param image_config:
+        :return:
+        """
+        types = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif']
+        image_paths = []
+        for _type in types:
+            image_paths.extend(list(image_config.image_dir.glob(f"*.{_type}")))
+        image_temp_dir = Path(f"{image_config.image_dir}/temp")
+        for image_path in image_paths:
+            output_path = image_temp_dir / f"{image_path.stem}.png"  # convert to png
+            subprocess.call(['convert', f'{image_path}',
+                             '-resize', f'{image_config.image_width}x{image_config.image_height}',
+                             '-quality', '100',
+                             f'{output_path}'])
+        return image_temp_dir

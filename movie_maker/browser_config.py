@@ -1,6 +1,7 @@
 import uuid
 from abc import ABCMeta, abstractmethod
 import hashlib
+from pathlib import Path
 from typing import List
 from dataclasses import dataclass
 
@@ -22,6 +23,7 @@ class BaseConfig(metaclass=ABCMeta):
 
 @dataclass
 class ImageConfig(BaseConfig):
+    image_dir: Path
     width: int = 1280
     height: int = 720
     limit_width = 1920
