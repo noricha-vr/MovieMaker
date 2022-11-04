@@ -16,9 +16,9 @@ cd MovieMaker
 docker build -t movie_maker .
 ```
 
-## Usage
+## Sample code
 
-From web page URL.
+Create movie from URL.
 
 ```python
 from movie_maker import MovieMaker, BrowserConfig
@@ -33,10 +33,10 @@ browser_config = BrowserConfig(url, width, height, limit_height, scroll_each)
 
 # create movie
 image_dir = MovieMaker.take_screenshots(browser_config)
-MovieMaker.create_movie(image_dir, browser_config.hash)
+MovieMaker.image_to_movie(image_dir, browser_config.hash)
 ```
 
-From GitHub repository.
+Create movie from GitHub repository.
 
 ```python
 from movie_maker import MovieMaker, BrowserConfig
