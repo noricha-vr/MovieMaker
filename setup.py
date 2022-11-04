@@ -9,7 +9,6 @@ setup(
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
     install_requires=[
-        'Jinja2>=2.11.3',
         'selenium>=4.5.0',
         'webdriver-manager>=3.8.4',
         'source-converter>=0.1.14',

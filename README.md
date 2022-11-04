@@ -29,11 +29,11 @@ width = 1280
 height = 720
 limit_height = 50000
 scroll_each = 200
-movie_config = BrowserConfig(url, width, height, limit_height, scroll_each)
+browser_config = BrowserConfig(url, width, height, limit_height, scroll_each)
 
 # create movie
-movie_maker = MovieMaker(movie_config)
-movie_maker.take_screenshots() 
+image_dir = MovieMaker.take_screenshots(browser_config)
+MovieMaker.create_movie(image_dir, browser_config.hash)
 ```
 
 From GitHub repository.
@@ -44,7 +44,7 @@ from movie_maker import MovieMaker, BrowserConfig
 # Please set the repository URL and what types of file you want.
 url = 'https://github.com/noricha-vr/source_converter'
 targets = ['*.md', '*.py', ]
-movie_config = BrowserConfig(url, targets=targets)
-# create movie
-MovieMaker(movie_config).take_screenshot_github_files()
+browser_config = BrowserConfig(url, targets=targets)
+image_dir = MovieMaker.take_screenshots_github_files(browser_config)
+movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
 ```

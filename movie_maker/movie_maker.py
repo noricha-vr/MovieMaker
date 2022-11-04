@@ -50,7 +50,7 @@ class MovieMaker:
         return image_paths
 
     @staticmethod
-    def take_screenshot_github_files(browser_config: BrowserConfig) -> Path:
+    def take_screenshots_github_files(browser_config: BrowserConfig) -> Path:
         """
         Create a movie from the given GitHub url.
         """

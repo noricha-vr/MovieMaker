@@ -40,11 +40,11 @@ class TestMovieMaker:
         assert movie_path.exists(), 'Movie file is not created.'
 
     @pytest.mark.parametrize(('url', 'targets', 'length'), [
-        ('https://github.com/noricha-vr/source_converter', ['*.md', '*.py', ], 20),
+        ('https://github.com/noricha-vr/source_converter', ['*.md', '*.py', ], 22),
     ])
     def test_create_github_movie(self, url, targets, length):
         browser_config = BrowserConfig(url, targets=targets)
-        image_dir = MovieMaker.take_screenshot_github_files(browser_config)
+        image_dir = MovieMaker.take_screenshots_github_files(browser_config)
         assert len(list(image_dir.glob('*.png'))) == length, 'Image file counts does not match.'
         movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
         assert movie_path.exists(), 'Movie file is not created.'
