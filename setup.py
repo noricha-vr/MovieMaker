@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vrc-movie-maker",
-    version="0.1.4",
+    version="0.1.5",
     license='MIT',
     author="Noricha",
     author_email="noricha.vr@gmail.com",
@@ -10,10 +10,9 @@ setup(
     include_package_data=True,
     install_requires=[
         'Jinja2>=2.11.3',
-        'moviepy>=1.0.3',
         'selenium>=4.5.0',
         'webdriver-manager>=3.8.4',
-        'source-converter>=0.1.8',
+        'source-converter>=0.1.14',
     ],
     url='https://github.com/noricha-vr/MovieMaker',
     extras_require={

@@ -6,6 +6,10 @@ from movie_maker import BrowserConfig
 
 
 class MovieMaker:
+    """
+    This class is used to make movie from website.
+    If input GitHub repository URL, download and converted to HTML. Then take screenshots and make movie.
+    """
 
     @staticmethod
     def image_to_movie(image_dir: Path, file_name: str, file_type: str = 'png') -> Path:
@@ -45,29 +49,31 @@ class MovieMaker:
             browser.driver.quit()
         return image_paths
 
-    def create_github_movie(self) -> Path:
+    @staticmethod
+    def take_screenshot_github_files(browser_config: BrowserConfig) -> Path:
         """
         Create a movie from the given GitHub url.
         """
+        image_dir = None
         # download source code
-        project_name = self.browser_config.url.split("/")[4]
-        folder_path = GithubDownloader.download_github_archive_and_unzip_to_file(self.browser_config.url, project_name)
+        words = browser_config.url.split("/")
+        if len(words) < 5:
+            raise Exception(f"Invalid GitHub URL: {browser_config.url}")
+        project_name = words[4]
+        folder_path = GithubDownloader.download_github_archive_and_unzip_to_file(browser_config.url, project_name)
         project_path = GithubDownloader.rename_project(folder_path, project_name)
         # Convert the source codes to html files.
         source_converter = SourceConverter('default')
-        html_file_path = source_converter.project_to_html(project_path, self.browser_config.targets)
-        image_paths = []
+        html_file_path = source_converter.project_to_html(project_path, browser_config.targets)
         browser = None
-        # Take screenshots multi pages.
         try:
-            browser = BrowserCreator(self.browser_config).create_browser()
+            # Take multi files screenshots.
+            browser = BrowserCreator(browser_config).create_browser()
             for html_path in html_file_path:
                 browser.open(f"file://{html_path.absolute()}")
-                image_paths.extend(browser.take_screenshots())
+                image_dir = browser.take_screenshots()
         except Exception as e:
-            browser.driver.quit()
             raise e
         finally:
             browser.driver.quit()
-        self.image_to_movie(image_paths, self.browser_config.movie_path)
-        return self.browser_config.movie_path
+        return image_dir

@@ -13,7 +13,6 @@ pip install vrc-movie-maker
 ```bash
 git clone https://github.com/noricha-vr/MovieMaker.git
 cd MovieMaker
-pip install -r requirements.txt
 docker build -t movie_maker .
 ```
 
@@ -47,5 +46,5 @@ url = 'https://github.com/noricha-vr/source_converter'
 targets = ['*.md', '*.py', ]
 movie_config = BrowserConfig(url, targets=targets)
 # create movie
-MovieMaker(movie_config).create_github_movie()
+MovieMaker(movie_config).take_screenshot_github_files()
 ```
