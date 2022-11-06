@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 import shutil
 from movie_maker import BrowserConfig, MovieMaker, ImageConfig
+from movie_maker.browser_config import PdfConfig
 
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
@@ -57,18 +58,18 @@ class TestMovieMaker:
     def test_create_movie_from_image(self, image_dir, length):
         shutil.rmtree(image_dir / 'output', ignore_errors=True)
         image_config = ImageConfig(image_dir)
-        image_dir = MovieMaker.format_images(image_config)
-        assert len(list(image_dir.glob("*"))) == length, 'Image file counts does not match.'
-        movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
+        output_image_dir = MovieMaker.format_images(image_config)
+        assert len(list(output_image_dir.glob("*"))) == length, 'Image file counts does not match.'
+        movie_path = MovieMaker.image_to_movie(output_image_dir, image_config.hash)
         assert movie_path.exists(), 'Movie file is not created.'
 
-    # @pytest.mark.parametrize(('image_dir', 'length'), [
-    #     (Path('pdf/テスト資料.pdf'), 14),
-    # ])
-    # def test_create_movie_from_image(self, image_dir, length):
-    #     shutil.rmtree(image_dir / 'output', ignore_errors=True)
-    #     image_config = PdfConfig(image_dir)
-    #     image_dir = MovieMaker.pdf_to_image(image_config)
-    #     assert len(list(image_dir.glob("*"))) == length, 'Image file counts does not match.'
-    #     movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
-    #     assert movie_path.exists(), 'Movie file is not created.'
+    @pytest.mark.parametrize(('pdf_path', 'length'), [
+        (Path('pdf/pdf.pdf'), 14),
+    ])
+    def test_create_movie_from_image(self, pdf_path, length):
+        shutil.rmtree(pdf_path / 'output', ignore_errors=True)
+        image_config = PdfConfig(pdf_path)
+        output_image_dir = MovieMaker.pdf_to_image(image_config)
+        assert len(list(output_image_dir.glob("*"))) == length, 'Image file counts does not match.'
+        movie_path = MovieMaker.image_to_movie(output_image_dir, image_config.hash)
+        assert movie_path.exists(), 'Movie file is not created.'

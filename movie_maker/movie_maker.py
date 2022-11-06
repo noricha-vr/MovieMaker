@@ -3,6 +3,7 @@ from pathlib import Path
 from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig, ImageConfig
+from movie_maker.browser_config import PdfConfig
 
 
 class MovieMaker:
@@ -93,10 +94,10 @@ class MovieMaker:
         image_paths = []
         for _type in types:
             image_paths.extend(list(image_config.image_dir.glob(f"*.{_type}")))
-        image_output_dir = Path(f"{image_config.image_dir}/output")
-        image_output_dir.mkdir(exist_ok=True)
+        output_image_dir = Path(f"{image_config.image_dir}/output")
+        output_image_dir.mkdir(exist_ok=True)
         for image_path in image_paths:
-            output_path = image_output_dir / f"{image_path.stem}.png"  # convert to png
+            output_path = output_image_dir / f"{image_path.stem}.png"  # convert to png
             # resize image.
             subprocess.call(['convert', f'{image_path}',
                              '-resize', f'{image_config.width}x{image_config.height}',
@@ -108,16 +109,18 @@ class MovieMaker:
                              '-extent', f'{image_config.width}x{image_config.height}',
                              '-quality', '100',
                              f'{output_path}'])
-        return image_output_dir
+        return output_image_dir
 
     # @staticmethod
     # def pdf_to_image(pdf_config: PdfConfig) -> Path:
     #     """
     #     Convert pdf to image.
-    #     :param pdf_path:
+    #     :param pdf_config:
     #     :return image_dir:
     #     """
-    #     image_dir = pdf_config.pdf_path.parent / pdf_config.pdf_path.stem / 'output'
-    #     subprocess.call(['convert', f'{pdf_config.pdf_path}',
-    #                      f'{image_dir}/%03d.png'])
-    #     return image_dir
+    #     output_image_dir = pdf_config.pdf_path.parent / pdf_config.pdf_path.stem
+    #     output_image_dir.mkdir(exist_ok=True, parents=True)
+    #     command = ['convert', f'{pdf_config.pdf_path}[0]', f'{output_image_dir}/%03d.png']
+    #     subprocess.call(command)
+    #     print(f'command: {command}')
+    #     return output_image_dir
