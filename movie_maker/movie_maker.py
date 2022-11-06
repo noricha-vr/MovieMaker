@@ -74,7 +74,7 @@ class MovieMaker:
             browser = BrowserCreator(browser_config).create_browser()
             for html_path in html_file_path:
                 browser.open(f"file://{html_path.absolute()}")
-                if image_dir is None: image_dir = browser.take_screenshots()
+                image_dir = browser.take_screenshots()
         except Exception as e:
             raise e
         finally:
