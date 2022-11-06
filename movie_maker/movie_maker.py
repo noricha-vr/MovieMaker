@@ -101,4 +101,10 @@ class MovieMaker:
                              '-resize', f'{image_config.width}x{image_config.height}',
                              '-quality', '100',
                              f'{output_path}'])
+            subprocess.call(['convert', f'{output_path}',
+                             '-background', 'black',
+                             '-extent', f'{image_config.width}x{image_config.height}',
+                             '-quality', '100',
+                             f'{output_path}'])
+
         return image_output_dir
