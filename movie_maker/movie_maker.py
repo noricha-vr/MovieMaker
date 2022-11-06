@@ -14,17 +14,18 @@ class MovieMaker:
     """
 
     @staticmethod
-    def image_to_movie(image_dir: Path, file_name: str, file_type: str = 'png') -> Path:
+    def image_to_movie(image_dir: Path, movie_path: Path, file_type: str = 'png') -> None:
         """
-        Create a movie from the given file paths.
+        Create image_dir files to movie.
         :param image_dir:
-        :param file_name: Don't include file extension.
-        :param file_type:
+        :param movie_path:
+        :param file_type: select input file type.
         :return None:
         """
         if len(list(image_dir.glob(f"*.{file_type}"))) == 0:
             raise Exception(f"No image files in {image_dir.absolute()}")
-        movie_path = Path(f"{image_dir}/{file_name}.mp4")
+        if movie_path.suffix != '.mp4':
+            movie_path = Path(f"{movie_path}.mp4")
         subprocess.call(['ffmpeg',
                          '-framerate', '1',
                          # Get image_dir/*.file_type
@@ -34,7 +35,6 @@ class MovieMaker:
                          '-preset', 'veryslow',  # encoding speed
                          '-tune', 'stillimage',  # tune for still image
                          f'{movie_path}'])
-        return movie_path
 
     @staticmethod
     def take_screenshots(browser_config: BrowserConfig) -> Path:
