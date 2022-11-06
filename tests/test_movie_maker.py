@@ -56,7 +56,7 @@ class TestMovieMaker:
     ])
     def test_create_movie_from_image(self, image_dir, length):
         shutil.rmtree(image_dir / 'output', ignore_errors=True)
-        image_config = ImageConfig(image_dir)
+        image_config = ImageConfig(image_dir=image_dir)
         output_image_dir = MovieMaker.format_images(image_config)
         assert len(list(output_image_dir.glob("*"))) == length, 'Image file counts does not match.'
         movie_path = MovieMaker.image_to_movie(output_image_dir, image_config.hash)

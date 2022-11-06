@@ -33,7 +33,7 @@ browser_config = BrowserConfig(url, width, height, limit_height, scroll_each)
 
 # create movie
 image_dir = MovieMaker.take_screenshots(browser_config)
-MovieMaker.image_to_movie(image_dir, browser_config.hash)
+movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
 ```
 
 Create movie from GitHub repository.
@@ -53,8 +53,9 @@ Create movie from local images.
 
 ```python
 from movie_maker import MovieMaker, ImageConfig
+from pathlib import Path
 
-image_dir = 'path/to/image/dir'
+image_dir = Path('path/to/image/dir')
 image_config = ImageConfig(image_dir)
 image_dir = MovieMaker.format_images(image_config)
 movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)

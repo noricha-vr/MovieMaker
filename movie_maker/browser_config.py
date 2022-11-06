@@ -1,4 +1,3 @@
-import uuid
 from abc import ABCMeta, abstractmethod
 import hashlib
 from pathlib import Path
@@ -8,13 +7,12 @@ from dataclasses import dataclass
 
 class BaseConfig(metaclass=ABCMeta):
 
-    @abstractmethod
     def __post_init__(self) -> None:
-        pass
+        self.apply_limit()
 
-    @abstractmethod
-    def make_hash(self) -> str:
-        pass
+    @property
+    def hash(self) -> str:
+        return hashlib.sha3_256(str(self.__dict__).encode()).hexdigest()
 
     @abstractmethod
     def apply_limit(self) -> None:
@@ -28,13 +26,6 @@ class ImageConfig(BaseConfig):
     height: int = 720
     limit_width = 1920
     limit_height = 1920
-
-    def __post_init__(self):
-        self.apply_limit()
-        self.hash = self.make_hash()
-
-    def make_hash(self) -> str:
-        return str(uuid.uuid4())
 
     def apply_limit(self) -> None:
         if self.limit_width < self.width: self.width = self.limit_width
@@ -59,12 +50,7 @@ class BrowserConfig(BaseConfig):
 
     def __post_init__(self):
         if self.url != '': self.domain = self.url.split("/")[2]
-        self.apply_limit()
-        self.hash = self.make_hash()
-
-    def make_hash(self) -> str:
-        text = f"{self.url}{self.width}{self.height}{self.max_page_height}{self.scroll_each}{str(self.targets)}".encode()
-        return hashlib.sha3_256(text).hexdigest()
+        super().__post_init__()
 
     def apply_limit(self) -> None:
         if self.limit_width < self.width: self.width = self.limit_width
