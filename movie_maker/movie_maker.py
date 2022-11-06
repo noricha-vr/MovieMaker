@@ -3,7 +3,6 @@ from pathlib import Path
 from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig, ImageConfig
-from movie_maker.browser_config import PdfConfig
 
 
 class MovieMaker:
