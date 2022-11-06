@@ -52,9 +52,10 @@ class TestMovieMaker:
         assert movie_path.exists(), 'Movie file is not created.'
 
     @pytest.mark.parametrize(('image_dir', 'length'), [
-        (Path('image/test_image'), 22),
+        (Path('test_image'), 7),
     ])
     def test_create_movie_from_image(self, image_dir, length):
+        shutil.rmtree(image_dir / 'output', ignore_errors=True)
         image_config = ImageConfig(image_dir)
         image_dir = MovieMaker.format_images(image_config)
         assert len(list(image_dir.glob("*"))) == length, 'Image file counts does not match.'

@@ -89,15 +89,16 @@ class MovieMaker:
         :param image_config:
         :return:
         """
-        types = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif']
+        types = ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif', 'pdf']
         image_paths = []
         for _type in types:
             image_paths.extend(list(image_config.image_dir.glob(f"*.{_type}")))
-        image_temp_dir = Path(f"{image_config.image_dir}/temp")
+        image_output_dir = Path(f"{image_config.image_dir}/output")
+        image_output_dir.mkdir(exist_ok=True)
         for image_path in image_paths:
-            output_path = image_temp_dir / f"{image_path.stem}.png"  # convert to png
+            output_path = image_output_dir / f"{image_path.stem}.png"  # convert to png
             subprocess.call(['convert', f'{image_path}',
-                             '-resize', f'{image_config.image_width}x{image_config.image_height}',
+                             '-resize', f'{image_config.width}x{image_config.height}',
                              '-quality', '100',
                              f'{output_path}'])
-        return image_temp_dir
+        return image_output_dir
