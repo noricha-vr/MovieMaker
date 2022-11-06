@@ -24,7 +24,8 @@ class TestMovieMaker:
         browser_config = BrowserConfig(url, width, height, limit_height, scroll_each)
         image_paths = MovieMaker.take_screenshots(browser_config)
         assert len(list(image_paths.glob('*.png'))) == length, 'Image file counts does not match.'
-        movie_path = MovieMaker.image_to_movie(image_paths, browser_config.hash)
+        movie_path = Path(f'movie/{browser_config.hash}.mp4')
+        MovieMaker.image_to_movie(image_paths, movie_path)
         assert movie_path.exists(), 'Movie file is not created.'
 
     @pytest.mark.parametrize(('url', 'width', 'height', 'limit_height', 'scroll_each', 'length'), [
