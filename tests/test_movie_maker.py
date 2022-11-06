@@ -61,3 +61,14 @@ class TestMovieMaker:
         assert len(list(image_dir.glob("*"))) == length, 'Image file counts does not match.'
         movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
         assert movie_path.exists(), 'Movie file is not created.'
+
+    # @pytest.mark.parametrize(('image_dir', 'length'), [
+    #     (Path('pdf/テスト資料.pdf'), 14),
+    # ])
+    # def test_create_movie_from_image(self, image_dir, length):
+    #     shutil.rmtree(image_dir / 'output', ignore_errors=True)
+    #     image_config = PdfConfig(image_dir)
+    #     image_dir = MovieMaker.pdf_to_image(image_config)
+    #     assert len(list(image_dir.glob("*"))) == length, 'Image file counts does not match.'
+    #     movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
+    #     assert movie_path.exists(), 'Movie file is not created.'

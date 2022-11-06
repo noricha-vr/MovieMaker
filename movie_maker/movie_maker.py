@@ -2,7 +2,7 @@ import subprocess
 from pathlib import Path
 from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
-from movie_maker import BrowserConfig
+from movie_maker import BrowserConfig, ImageConfig
 
 
 class MovieMaker:
@@ -74,7 +74,7 @@ class MovieMaker:
             browser = BrowserCreator(browser_config).create_browser()
             for html_path in html_file_path:
                 browser.open(f"file://{html_path.absolute()}")
-                image_dir = browser.take_screenshots()
+                if image_dir is None: image_dir = browser.take_screenshots()
         except Exception as e:
             raise e
         finally:
@@ -82,7 +82,7 @@ class MovieMaker:
         return image_dir
 
     @staticmethod
-    def format_images(image_config) -> Path:
+    def format_images(image_config: ImageConfig) -> Path:
         """
         Get types of image paths. Resize image and convert to png.
         Format images.
@@ -97,14 +97,27 @@ class MovieMaker:
         image_output_dir.mkdir(exist_ok=True)
         for image_path in image_paths:
             output_path = image_output_dir / f"{image_path.stem}.png"  # convert to png
+            # resize image.
             subprocess.call(['convert', f'{image_path}',
                              '-resize', f'{image_config.width}x{image_config.height}',
                              '-quality', '100',
                              f'{output_path}'])
+            # fit image width and height.
             subprocess.call(['convert', f'{output_path}',
                              '-background', 'black',
                              '-extent', f'{image_config.width}x{image_config.height}',
                              '-quality', '100',
                              f'{output_path}'])
-
         return image_output_dir
+
+    # @staticmethod
+    # def pdf_to_image(pdf_config: PdfConfig) -> Path:
+    #     """
+    #     Convert pdf to image.
+    #     :param pdf_path:
+    #     :return image_dir:
+    #     """
+    #     image_dir = pdf_config.pdf_path.parent / pdf_config.pdf_path.stem / 'output'
+    #     subprocess.call(['convert', f'{pdf_config.pdf_path}',
+    #                      f'{image_dir}/%03d.png'])
+    #     return image_dir
