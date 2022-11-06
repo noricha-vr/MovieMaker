@@ -1,5 +1,7 @@
 import subprocess
 from pathlib import Path
+from typing import List
+
 from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig, ImageConfig
@@ -52,11 +54,34 @@ class MovieMaker:
         return image_paths
 
     @staticmethod
+    def take_local_file_screenshots(file_paths: List[Path], browser_config: BrowserConfig) -> Path:
+        """
+        Take screenshots from the given local files.
+        :param file_paths:
+        :param browser_config:
+        :return: image_dir
+        """
+        image_dir = None
+        browser = None
+        try:
+            # Take multi files screenshots.
+            browser = BrowserCreator(browser_config).create_browser()
+            for html_path in file_paths:
+                browser.open(f"file://{html_path.absolute()}")
+                image_dir = browser.take_screenshots()
+        except Exception as e:
+            raise e
+        finally:
+            browser.driver.quit()
+        return image_dir
+
+    @staticmethod
     def take_screenshots_github_files(browser_config: BrowserConfig) -> Path:
         """
         Create a movie from the given GitHub url.
+        :param browser_config:
+        :return: movie_path
         """
-        image_dir = None
         # download source code
         words = browser_config.url.split("/")
         if len(words) < 5:
@@ -67,18 +92,7 @@ class MovieMaker:
         # Convert the source codes to html files.
         source_converter = SourceConverter('default')
         html_file_path = source_converter.project_to_html(project_path, browser_config.targets)
-        # TODO Split to take local files screen shots.
-        browser = None
-        try:
-            # Take multi files screenshots.
-            browser = BrowserCreator(browser_config).create_browser()
-            for html_path in html_file_path:
-                browser.open(f"file://{html_path.absolute()}")
-                image_dir = browser.take_screenshots()
-        except Exception as e:
-            raise e
-        finally:
-            browser.driver.quit()
+        image_dir = MovieMaker.take_local_file_screenshots(html_file_path, browser_config)
         return image_dir
 
     @staticmethod
