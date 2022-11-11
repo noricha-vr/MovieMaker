@@ -5,6 +5,32 @@ from typing import List
 from dataclasses import dataclass
 
 
+@dataclass
+class MovieConfig:
+    """
+    Movie config.
+    :param image_dir: image directory path.
+    :param movie_path: output movie file path.
+    :param image_type: image file type.
+    :param width: movie width.
+    :param frame_rate: frame per second.
+    """
+    input_image_dir: Path
+    output_movie_path: Path
+    image_type: str = 'png'
+    width: int = 1280
+    frame_rate: int = 4
+    max_frame_rate: int = 4
+
+    def __post_init__(self):
+        if self.frame_rate > self.max_frame_rate:
+            raise ValueError(f'frame_rate should be less than {self.max_frame_rate}')
+        if self.width % 2 != 0:
+            self.width += 1
+        if self.output_movie_path.suffix != '.mp4':
+            self.output_movie_path = Path(f"{self.output_movie_path}.mp4")
+
+
 class BaseConfig(metaclass=ABCMeta):
     fps = 1
 

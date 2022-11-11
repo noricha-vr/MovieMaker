@@ -8,6 +8,7 @@ from typing import List
 from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig, ImageConfig
+from movie_maker.browser_config import MovieConfig
 
 
 class MovieMaker:
@@ -17,47 +18,52 @@ class MovieMaker:
     """
 
     @staticmethod
-    def image_to_movie(image_dir: Path, movie_path: Path,
-                       file_type: str = 'png', framerate: int = 4, width: int = 1280) -> None:
+    def __copy_for_frame_rate_images(image_paths: List[Path], frame_rate) -> None:
+        """
+        Copy files to create images for frame rate.
+        :param image_paths:
+        :param frame_rate:
+        :return:
+        """
+        # copy images framerate times -1
+        t = []
+        for i in range(1, frame_rate):
+            for image_path in image_paths:
+                # copy image. file name is {image.stem}_{i}.{image.suffix}
+                t.append(Thread(target=shutil.copy,
+                                args=(
+                                    image_path,
+                                    image_path.parent.joinpath(f'{image_path.stem}_{i}{image_path.suffix}'))))
+        [thread.start() for thread in t]
+        [thread.join() for thread in t]
+
+    @staticmethod
+    def image_to_movie(movie_config: MovieConfig) -> None:
         """
         Create image_dir files to movie.
         :param image_dir:
         :param movie_path:
         :param file_type: select input file type.
-        :param framerate:
+        :param frame_rate: 1 or 2 frame get black screen. 3 or 4 is good.
         :param width: movie width should be even number.
         :return None:
         """
-        images = sorted(image_dir.glob(f'*.{file_type}'))
-        if len(images) == 0:
-            raise Exception(f"No image files in {image_dir.absolute()}")
-        if width % 2 != 0:
-            width += 1
-        # copy images framerate times -1
-        t = []
-        for i in range(1, framerate):
-            for image in images:
-                # copy image. file name is {image.stem}_{i}.{image.suffix}
-                shutil.copy(image, image_dir.joinpath(f'{image.stem}_{i}{image.suffix}'))
-                t.append(Thread(target=shutil.copy,
-                                args=(image, image_dir.joinpath(f'{image.stem}_{i}{image.suffix}'))))
-        [thread.start() for thread in t]
-        [thread.join() for thread in t]
-
-        if movie_path.suffix != '.mp4':
-            movie_path = Path(f"{movie_path}.mp4")
+        image_paths = sorted(movie_config.input_image_dir.glob(f'*.{movie_config.image_type}'))
+        if len(image_paths) == 0:
+            raise Exception(f"No image files in {movie_config.input_image_dir.absolute()}")
+        MovieMaker.__copy_for_frame_rate_images(image_paths, movie_config.frame_rate)
         # stop watch
         start = time.time()
         subprocess.call(['ffmpeg',
-                         '-framerate', f'{framerate}',
+                         '-framerate', f'{movie_config.frame_rate}',
                          # Select image_dir/*.file_type
-                         '-pattern_type', 'glob', '-i', f'{image_dir}/*.{file_type}',
-                         '-vf', f"scale='min({width},iw)':-2",  # iw is input width, -2 is auto height
+                         '-pattern_type', 'glob', '-i', f'{movie_config.input_image_dir}/*.{movie_config.image_type}',
+                         '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
                          '-c:v', 'h264',  # codec
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
                          '-preset', 'veryslow',  # encoding speed. slow, medium, fast, veryfast, superfast, ultrafast
                          '-tune', 'stillimage',  # tune for still image
-                         f'{movie_path}'])
+                         f'{movie_config.output_movie_path}'])
         print(f"MovieMaker.image_to_movie: {time.time() - start} sec")
 
     @staticmethod
