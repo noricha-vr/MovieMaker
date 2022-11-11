@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 
 class BaseConfig(metaclass=ABCMeta):
-    fps = 24
+    fps = 1
 
     def __post_init__(self) -> None:
         self.apply_limit()
