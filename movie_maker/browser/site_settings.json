@@ -18,5 +18,10 @@
       "xpath_timeout": 10,
       "xpath": "//*[@data-testid='tweetText']"
     }
+  },
+  "www.google.com": {
+    "https://www.google.com/maps/*": {
+      "sleep": 3
+    }
   }
 }
