@@ -68,7 +68,11 @@ class BaseBrowser(metaclass=abc.ABCMeta):
     def open(self, url: str) -> None:
         """open url and set scroll_height"""
         logger.info(f"Open url: {url}")
-        self.driver.get(url)
+        try:
+            self.driver.get(url)
+        except Exception as e:
+            logger.warning(f'Failed to open url: {url}')
+            self.driver.refresh()
         self.wait()
 
     def take_screenshots(self) -> Path:
