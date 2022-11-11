@@ -3,6 +3,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def create_headless_chromedriver(width: int = 1280, height: int = 720, driver_path: str = None) -> webdriver.Chrome:
+    # timeout
+    page_load_timeout = 20
     # The following options are required to make headless Chrome
     # Work in a Docker container
     chrome_options = webdriver.ChromeOptions()
@@ -16,4 +18,6 @@ def create_headless_chromedriver(width: int = 1280, height: int = 720, driver_pa
     chrome_options.add_argument(
         "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36")
     # Initialize a new browser
-    return webdriver.Chrome(ChromeDriverManager(path=driver_path).install(), chrome_options=chrome_options)
+    driver = webdriver.Chrome(ChromeDriverManager(path=driver_path).install(), chrome_options=chrome_options)
+    driver.set_page_load_timeout(page_load_timeout)
+    return driver
