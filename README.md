@@ -22,6 +22,7 @@ Create movie from URL.
 
 ```python
 from movie_maker import MovieMaker, BrowserConfig
+from pathlib import Path
 
 # Please set the url, browser size and scroll.
 url = "https://www.google.com/"
@@ -33,20 +34,23 @@ browser_config = BrowserConfig(url, width, height, limit_height, scroll_each)
 
 # create movie
 image_dir = MovieMaker.take_screenshots(browser_config)
-movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
+movie_path = Path(f'movie/{browser_config.hash}.mp4')
+MovieMaker.image_to_movie(image_dir, movie_path)
 ```
 
 Create movie from GitHub repository.
 
 ```python
 from movie_maker import MovieMaker, BrowserConfig
+from pathlib import Path
 
 # Please set the repository URL and what types of file you want.
 url = 'https://github.com/noricha-vr/source_converter'
 targets = ['*.md', '*.py', ]
 browser_config = BrowserConfig(url, targets=targets)
 image_dir = MovieMaker.take_screenshots_github_files(browser_config)
-movie_path = MovieMaker.image_to_movie(image_dir, browser_config.hash)
+movie_path = Path(f'movie/{browser_config.hash}.mp4')
+MovieMaker.image_to_movie(image_dir, movie_path)
 ```
 
 Create movie from local images.
@@ -58,5 +62,6 @@ from pathlib import Path
 image_dir = Path('path/to/image/dir')
 image_config = ImageConfig(image_dir)
 image_dir = MovieMaker.format_images(image_config)
-movie_path = MovieMaker.image_to_movie(image_dir, image_config.hash)
+movie_path = Path(f'movie/{image_config.hash}.mp4')
+MovieMaker.image_to_movie(image_dir, movie_path)
 ```
