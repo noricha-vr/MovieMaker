@@ -21,7 +21,7 @@
   },
   "www.google.com": {
     "https://www.google.com/maps/*": {
-      "sleep": 3
+      "sleep": 6
     }
   }
 }
