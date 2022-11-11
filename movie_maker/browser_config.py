@@ -14,6 +14,7 @@ class MovieConfig:
     :param image_type: image file type.
     :param width: movie width.
     :param frame_rate: frame per second.
+    :param speed: 'veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'
     """
     input_image_dir: Path
     output_movie_path: Path
@@ -21,6 +22,7 @@ class MovieConfig:
     width: int = 1280
     frame_rate: int = 4
     max_frame_rate: int = 4
+    speed = 'medium'
 
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:
