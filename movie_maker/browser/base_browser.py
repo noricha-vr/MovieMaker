@@ -4,6 +4,7 @@ import os
 import re
 import time
 import logging
+import uuid
 from pathlib import Path
 from typing import List
 
@@ -33,8 +34,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         Create folder named by timestamp
         :return: Path object
         """
-        timestamp = str(time.time())[0:10]
-        image_folder_path = f"image/{timestamp}"
+        image_folder_path = f"image/{uuid.uuid4()}"
         os.makedirs(image_folder_path)
         return Path(image_folder_path)
 
