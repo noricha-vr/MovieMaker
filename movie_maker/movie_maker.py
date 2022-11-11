@@ -14,11 +14,12 @@ class MovieMaker:
     """
 
     @staticmethod
-    def image_to_movie(image_dir: Path, movie_path: Path, file_type: str = 'png') -> None:
+    def image_to_movie(image_dir: Path, movie_path: Path, fps: int = 24, file_type: str = 'png', ) -> None:
         """
         Create image_dir files to movie.
         :param image_dir:
         :param movie_path:
+        :param fps:
         :param file_type: select input file type.
         :return None:
         """
@@ -27,13 +28,14 @@ class MovieMaker:
         if movie_path.suffix != '.mp4':
             movie_path = Path(f"{movie_path}.mp4")
         subprocess.call(['ffmpeg',
-                         '-framerate', '1',
+                         '-framerate', f'{int(fps)}',
                          # Get image_dir/*.file_type
                          '-pattern_type', 'glob', '-i', f'{image_dir}/*.{file_type}',
                          '-c:v', 'h264',  # codec
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
                          '-preset', 'veryslow',  # encoding speed
                          '-tune', 'stillimage',  # tune for still image
+                         '-movflags', '+faststart',  # fast start
                          f'{movie_path}'])
 
     @staticmethod
