@@ -1,5 +1,8 @@
+import shutil
 import subprocess
+import time
 from pathlib import Path
+from threading import Thread
 from typing import List
 
 from source_converter import SourceConverter, GithubDownloader
@@ -14,27 +17,48 @@ class MovieMaker:
     """
 
     @staticmethod
-    def image_to_movie(image_dir: Path, movie_path: Path, file_type: str = 'png') -> None:
+    def image_to_movie(image_dir: Path, movie_path: Path,
+                       file_type: str = 'png', framerate: int = 4, width: int = 1280) -> None:
         """
         Create image_dir files to movie.
         :param image_dir:
         :param movie_path:
         :param file_type: select input file type.
+        :param framerate:
+        :param width: movie width should be even number.
         :return None:
         """
-        if len(list(image_dir.glob(f"*.{file_type}"))) == 0:
+        images = sorted(image_dir.glob(f'*.{file_type}'))
+        if len(images) == 0:
             raise Exception(f"No image files in {image_dir.absolute()}")
+        if width % 2 != 0:
+            width += 1
+        # copy images framerate times -1
+        t = []
+        for i in range(1, framerate):
+            for image in images:
+                # copy image. file name is {image.stem}_{i}.{image.suffix}
+                shutil.copy(image, image_dir.joinpath(f'{image.stem}_{i}{image.suffix}'))
+                t.append(Thread(target=shutil.copy,
+                                args=(image, image_dir.joinpath(f'{image.stem}_{i}{image.suffix}'))))
+        [thread.start() for thread in t]
+        [thread.join() for thread in t]
+
         if movie_path.suffix != '.mp4':
             movie_path = Path(f"{movie_path}.mp4")
+        # stop watch
+        start = time.time()
         subprocess.call(['ffmpeg',
-                         '-framerate', '1',
-                         # Get image_dir/*.file_type
+                         '-framerate', f'{framerate}',
+                         # Select image_dir/*.file_type
                          '-pattern_type', 'glob', '-i', f'{image_dir}/*.{file_type}',
+                         '-vf', f"scale='min({width},iw)':-2",  # iw is input width, -2 is auto height
                          '-c:v', 'h264',  # codec
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
-                         '-preset', 'veryslow',  # encoding speed
+                         '-preset', 'veryslow',  # encoding speed. slow, medium, fast, veryfast, superfast, ultrafast
                          '-tune', 'stillimage',  # tune for still image
                          f'{movie_path}'])
+        print(f"MovieMaker.image_to_movie: {time.time() - start} sec")
 
     @staticmethod
     def take_screenshots(browser_config: BrowserConfig) -> Path:

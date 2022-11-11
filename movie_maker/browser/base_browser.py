@@ -2,6 +2,7 @@ import abc
 import json
 import os
 import re
+import shutil
 import time
 import logging
 import uuid
@@ -67,7 +68,11 @@ class BaseBrowser(metaclass=abc.ABCMeta):
     def open(self, url: str) -> None:
         """open url and set scroll_height"""
         logger.info(f"Open url: {url}")
-        self.driver.get(url)
+        try:
+            self.driver.get(url)
+        except Exception as e:
+            logger.warning(f'Failed to open url: {url}')
+            self.driver.refresh()
         self.wait()
 
     def take_screenshots(self) -> Path:
@@ -87,6 +92,10 @@ class BaseBrowser(metaclass=abc.ABCMeta):
             # Take screenshot
             image_path = self.image_folder_path / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}.png"
             self.driver.save_screenshot(str(image_path.absolute()))
+            # copy image file 'fpx' times. file suffix is _01, _02, _03, ...
+            for i in range(1, self.browser_config.fps):
+                copy_path = self.image_folder_path / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}_{str(i).zfill(2)}.png"
+                shutil.copyfile(image_path, copy_path)
             file_paths.append(image_path)
             # If current window bottom height is over max_height.
             if self.browser_config.max_page_height < window_bottom_height:
