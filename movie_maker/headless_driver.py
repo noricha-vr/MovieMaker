@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
 
@@ -30,7 +31,8 @@ def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver:
     chrome_options.add_argument(
         "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36")
     # Initialize a new browser. Browser type is Brave.
-    driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install(),
-                              chrome_options=chrome_options)
+    driver = webdriver.Chrome(
+        ChromeDriverManager(path=browser_config.driver_path, chrome_type=ChromeType.BRAVE).install(),
+        chrome_options=chrome_options)
     driver.set_page_load_timeout(page_load_timeout)
     return driver
