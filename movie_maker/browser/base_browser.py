@@ -23,9 +23,8 @@ class BaseBrowser(metaclass=abc.ABCMeta):
 
     def __init__(self, browser_config: BrowserConfig):
         self.browser_config = browser_config
-        self.image_folder_path = self.create_image_folder()
-        self.driver = create_headless_chromedriver(
-            browser_config.width, browser_config.height, browser_config.driver_path)
+        self.image_dir = self.create_image_folder()
+        self.driver = create_headless_chromedriver(browser_config)
         self.driver.implicitly_wait(10)
         self.page_no = 0
 
@@ -43,7 +42,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         Delete image folder.
         """
-        os.rmdir(self.image_folder_path)
+        os.rmdir(self.image_dir)
 
     def _get_window_bottom_height(self) -> int:
         """
@@ -90,11 +89,11 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         while window_bottom_height != self._get_window_bottom_height():
             window_bottom_height = self._get_window_bottom_height()
             # Take screenshot
-            image_path = self.image_folder_path / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}.png"
+            image_path = self.image_dir / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}.png"
             self.driver.save_screenshot(str(image_path.absolute()))
             # copy image file 'fpx' times. file suffix is _01, _02, _03, ...
             for i in range(1, self.browser_config.fps):
-                copy_path = self.image_folder_path / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}_{str(i).zfill(2)}.png"
+                copy_path = self.image_dir / f"{self._get_page_no()}_{str(scroll_to).zfill(5)}_{str(i).zfill(2)}.png"
                 shutil.copyfile(image_path, copy_path)
             file_paths.append(image_path)
             # If current window bottom height is over max_height.
@@ -104,7 +103,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
             self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
             scroll_to += self.browser_config.scroll_each
         self.page_no += 1
-        return self.image_folder_path
+        return self.image_dir
 
     def wait(self) -> None:
         """
