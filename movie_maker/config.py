@@ -69,6 +69,8 @@ class BrowserConfig(BaseConfig):
     max_page_height: int = 50000
     scroll_each: int = 200
     targets: List[str] = None
+    locale: str = 'en_US'
+    lang: str = 'en-US'
     # limits for browser
     limit_minimum_scroll = 200
     minimum_page_height = 3000
@@ -79,6 +81,7 @@ class BrowserConfig(BaseConfig):
 
     def __post_init__(self):
         if self.url != '': self.domain = self.url.split("/")[2]
+        self.lang = self.locale.replace('_', '-')
         super().__post_init__()
 
     def apply_limit(self) -> None:
