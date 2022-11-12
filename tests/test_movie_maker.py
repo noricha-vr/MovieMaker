@@ -3,9 +3,11 @@ import glob
 from pathlib import Path
 import pytest
 import shutil
-from movie_maker import BrowserConfig, MovieMaker, ImageConfig
+from movie_maker import BrowserConfig, MovieMaker, ImageConfig, BaseBrowser
 from movie_maker.config import MovieConfig
+import logging
 
+logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler()])
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
 
@@ -80,3 +82,21 @@ class TestMovieMaker:
         movie_config = MovieConfig(formatted_image_dir, movie_path)
         MovieMaker.image_to_movie(movie_config)
         assert movie_path.exists(), 'Movie file is not created.'
+
+    # If you use multi tests, This test can not pass.
+    # I don't know why, browser locale is kept with first test locale.
+    @pytest.mark.parametrize(('url', 'locale'), [
+        ("https://pypi.org/", 'ja_JP'),
+        # ("https://pypi.org/", 'zh_CN'),
+        # ("https://pypi.org/", 'ko_KR'),
+        # ("https://pypi.org/", 'en_US'),
+    ])
+    def test_switch_locale(self, url, locale):
+        browser_config = BrowserConfig(url, locale=locale)
+        logging.info(f'Locale: {browser_config.locale}')
+        browser = BaseBrowser(browser_config)
+        browser.driver.get(browser_config.url)
+        browser.driver.save_screenshot(str(browser.image_dir / 'test.png'))
+        browser_locale = browser.driver.execute_script('return navigator.language')
+        assert browser_locale == locale.replace('_', '-') or browser_locale == locale.split('_')[0], \
+            'Locale does not match.'
