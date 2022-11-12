@@ -9,8 +9,8 @@ from dataclasses import dataclass
 class MovieConfig:
     """
     Movie config.
-    :param image_dir: image directory path.
-    :param movie_path: output movie file path.
+    :param input_image_dir: image directory path.
+    :param output_movie_path: output movie file path.
     :param image_type: image file type.
     :param width: movie width.
     :param frame_rate: frame per second.
@@ -22,7 +22,7 @@ class MovieConfig:
     width: int = 1280
     frame_rate: int = 4
     max_frame_rate: int = 4
-    speed = 'medium'
+    encode_speed = 'medium'
 
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:
@@ -53,12 +53,12 @@ class ImageConfig(BaseConfig):
     image_dir: Path
     width: int = 1280
     height: int = 720
-    limit_width = 1920
-    limit_height = 1920
+    max_width = 1920
+    max_height = 1920
 
     def apply_limit(self) -> None:
-        if self.limit_width < self.width: self.width = self.limit_width
-        if self.limit_height < self.height: self.height = self.limit_height
+        if self.max_width < self.width: self.width = self.max_width
+        if self.max_height < self.height: self.height = self.max_height
 
 
 @dataclass

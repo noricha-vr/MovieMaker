@@ -61,7 +61,7 @@ class MovieMaker:
                          '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
                          '-c:v', 'h264',  # codec
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
-                         '-preset', movie_config.speed,
+                         '-preset', movie_config.encode_speed,
                          '-tune', 'stillimage',  # tune for still image
                          f'{movie_config.output_movie_path}'])
         print(f"MovieMaker.image_to_movie: {time.time() - start} sec")
