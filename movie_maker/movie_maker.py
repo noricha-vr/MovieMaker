@@ -153,17 +153,3 @@ class MovieMaker:
                              '-quality', '100',
                              f'{output_path}'])
         return output_image_dir
-
-    # @staticmethod
-    # def pdf_to_image(pdf_config: PdfConfig) -> Path:
-    #     """
-    #     Convert pdf to image.
-    #     :param pdf_config:
-    #     :return image_dir:
-    #     """
-    #     output_image_dir = pdf_config.pdf_path.parent / pdf_config.pdf_path.stem
-    #     output_image_dir.mkdir(exist_ok=True, parents=True)
-    #     command = ['convert', f'{pdf_config.pdf_path}[0]', f'{output_image_dir}/%03d.png']
-    #     subprocess.call(command)
-    #     print(f'command: {command}')
-    #     return output_image_dir
