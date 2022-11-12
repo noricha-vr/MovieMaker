@@ -85,7 +85,7 @@ class BaseBrowser(metaclass=abc.ABCMeta):
         """
         file_paths = []
         window_bottom_height = 0
-        scroll_to = self.browser_config.scroll_each
+        scroll_to = self.browser_config.scroll
         while window_bottom_height != self._get_window_bottom_height():
             window_bottom_height = self._get_window_bottom_height()
             # Take screenshot
@@ -97,11 +97,11 @@ class BaseBrowser(metaclass=abc.ABCMeta):
                 shutil.copyfile(image_path, copy_path)
             file_paths.append(image_path)
             # If current window bottom height is over max_height.
-            if self.browser_config.max_page_height < window_bottom_height:
+            if self.browser_config.page_height < window_bottom_height:
                 break
             # Scroll and update scroll_to
             self.driver.execute_script(f"window.scrollTo(0, {scroll_to})")
-            scroll_to += self.browser_config.scroll_each
+            scroll_to += self.browser_config.scroll
         self.page_no += 1
         return self.image_dir
 

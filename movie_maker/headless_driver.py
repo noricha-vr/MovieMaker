@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
 
@@ -14,12 +13,10 @@ def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver:
     :param browser_config: BrowserConfig object
     :return: Chrome driver
     """
-    # Change local setting on pc
+    # Set locale
     os.environ['LANG'] = f'{browser_config.locale}.UTF-8'
-    # timeout
-    page_load_timeout = 20
-    # The following options are required to make headless Chrome
-    # Work in a Docker container
+    # The following options are required to make headless Brave
+    # Works in a Docker container
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument(f"--lang={browser_config.lang}")
@@ -34,5 +31,5 @@ def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver:
     driver = webdriver.Chrome(
         ChromeDriverManager(path=browser_config.driver_path, chrome_type=ChromeType.BRAVE).install(),
         chrome_options=chrome_options)
-    driver.set_page_load_timeout(page_load_timeout)
+    driver.set_page_load_timeout(browser_config.page_load_timeout)
     return driver

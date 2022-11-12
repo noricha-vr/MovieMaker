@@ -63,21 +63,24 @@ class ImageConfig(BaseConfig):
 
 @dataclass
 class BrowserConfig(BaseConfig):
+    # user inputs
     url: str = ''
     width: int = 1280
     height: int = 720
-    max_page_height: int = 50000
-    scroll_each: int = 200
+    page_height: int = 50000
+    scroll: int = 200
     targets: List[str] = None
     locale: str = 'en_US'
     lang: str = 'en-US'
     # limits for browser
-    limit_minimum_scroll = 200
-    minimum_page_height = 3000
-    limit_page_height = 100000
-    limit_width = 1920
-    limit_height = 1920
+    min_scroll = 200
+    min_page_height = 3000
+    max_page_height = 100000
+    max_width = 1920
+    max_height = 1920
+    # driver settings
     driver_path = Path(__file__).parent
+    page_load_timeout = 20
 
     def __post_init__(self):
         if self.url != '': self.domain = self.url.split("/")[2]
@@ -85,10 +88,10 @@ class BrowserConfig(BaseConfig):
         super().__post_init__()
 
     def apply_limit(self) -> None:
-        if self.limit_width < self.width: self.width = self.limit_width
-        if self.limit_height < self.height: self.height = self.limit_height
-        if self.limit_page_height < self.max_page_height: self.max_page_height = self.limit_page_height
-        if self.scroll_each < self.limit_minimum_scroll: self.scroll_each = self.limit_minimum_scroll
+        if self.max_width < self.width: self.width = self.max_width
+        if self.max_height < self.height: self.height = self.max_height
+        if self.max_page_height < self.page_height: self.page_height = self.max_page_height
+        if self.scroll < self.min_scroll: self.scroll = self.min_scroll
 
 # @dataclass
 # class PdfConfig(BaseConfig):
