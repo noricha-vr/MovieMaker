@@ -1,11 +1,13 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.utils import ChromeType
+
 import os
 
 from movie_maker import BrowserConfig
 
 
-def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver.Chrome:
+def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver:
     """
     Create headless Chrome driver.
     :param browser_config: BrowserConfig object
@@ -27,8 +29,8 @@ def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver.Chr
     chrome_options.add_argument("--remote-debugging-port=9222")
     chrome_options.add_argument(
         "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36")
-    # Initialize a new browser
-    driver = webdriver.Chrome(ChromeDriverManager(
-        path=browser_config.driver_path).install(), chrome_options=chrome_options)
+    # Initialize a new browser. Browser type is Brave.
+    driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install(),
+                              chrome_options=chrome_options)
     driver.set_page_load_timeout(page_load_timeout)
     return driver
