@@ -77,7 +77,7 @@ class BrowserConfig(BaseConfig):
     limit_page_height = 100000
     limit_width = 1920
     limit_height = 1920
-    driver_path = None
+    driver_path = Path(__file__).parent
 
     def __post_init__(self):
         if self.url != '': self.domain = self.url.split("/")[2]

@@ -5,9 +5,7 @@ import pytest
 import shutil
 from movie_maker import BrowserConfig, MovieMaker, ImageConfig, BaseBrowser
 from movie_maker.config import MovieConfig
-import logging
 
-logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler()])
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
 
@@ -93,7 +91,6 @@ class TestMovieMaker:
     ])
     def test_switch_locale(self, url, locale):
         browser_config = BrowserConfig(url, locale=locale)
-        logging.info(f'Locale: {browser_config.locale}')
         browser = BaseBrowser(browser_config)
         browser.driver.get(browser_config.url)
         browser.driver.save_screenshot(str(browser.image_dir / 'test.png'))
