@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 import shutil
 from movie_maker import BrowserConfig, MovieMaker, ImageConfig
-from movie_maker.browser_config import MovieConfig
+from movie_maker.config import MovieConfig
 
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
