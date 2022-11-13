@@ -11,8 +11,8 @@ class MovieConfig:
     Movie config.
     :param input_image_dir: image directory path.
     :param output_movie_path: output movie file path.
-    :param image_type: image file type.
     :param width: movie width.
+    :param image_type: image file type.
     :param frame_rate: frame per second.
     :param speed: 'veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'
     """
