@@ -50,7 +50,10 @@ class MovieMaker:
         """
         image_paths = sorted(movie_config.input_image_dir.glob(f'*.{movie_config.image_type}'))
         if len(image_paths) == 0:
-            raise Exception(f"No image files in {movie_config.input_image_dir.absolute()}")
+            raise Exception(
+                f"No image files in {movie_config.input_image_dir.absolute()}. "
+                f"Target file type is {movie_config.image_type}"
+                f"Image dir files are {list(movie_config.input_image_dir.glob('*'))}")
         MovieMaker.__copy_for_frame_rate_images(image_paths, movie_config.frame_rate)
         # stop watch
         start = time.time()

@@ -3,6 +3,9 @@ import glob
 from pathlib import Path
 import pytest
 import shutil
+
+from selenium.webdriver.common.by import By
+
 from movie_maker import BrowserConfig, MovieMaker, ImageConfig, BaseBrowser
 from movie_maker.config import MovieConfig
 
@@ -81,19 +84,14 @@ class TestMovieMaker:
         MovieMaker.image_to_movie(movie_config)
         assert movie_path.exists(), 'Movie file is not created.'
 
-    # If you use multi tests, This test can not pass.
-    # I don't know why, browser locale is kept with first test locale.
-    @pytest.mark.parametrize(('url', 'locale'), [
-        ("https://pypi.org/", 'ja_JP'),
-        # ("https://pypi.org/", 'zh_CN'),
-        # ("https://pypi.org/", 'ko_KR'),
-        # ("https://pypi.org/", 'en_US'),
+    @pytest.mark.parametrize(('url', 'lang', 'page_lang'), [
+        ("https://pypi.org/", 'ja-JP', 'ja'),
+        ("https://pypi.org/", 'en-US', 'en'),
     ])
-    def test_switch_locale(self, url, locale):
-        browser_config = BrowserConfig(url, locale=locale)
+    def test_switch_locale(self, url, lang, page_lang):
+        browser_config = BrowserConfig(url, page_height=720, lang=lang)
         browser = BaseBrowser(browser_config)
         browser.driver.get(browser_config.url)
         browser.driver.save_screenshot(str(browser.image_dir / 'test.png'))
-        browser_locale = browser.driver.execute_script('return navigator.language')
-        assert browser_locale == locale.replace('_', '-') or browser_locale == locale.split('_')[0], \
-            'Locale does not match.'
+        _page_lang = browser.driver.find_element(By.TAG_NAME, 'html').get_attribute('lang')
+        assert _page_lang == page_lang, 'locale is mismatch'
