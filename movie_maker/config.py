@@ -18,8 +18,8 @@ class MovieConfig:
     """
     input_image_dir: Path
     output_movie_path: Path
-    image_type: str = 'png'
     width: int = 1280
+    image_type: str = 'png'
     frame_rate: int = 4
     max_frame_rate: int = 4
     encode_speed = 'medium'
