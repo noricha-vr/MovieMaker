@@ -66,6 +66,7 @@ class MovieMaker:
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
                          '-preset', movie_config.encode_speed,
                          '-tune', 'stillimage',  # tune for still image
+                         '-y',  # overwrite output file
                          f'{movie_config.output_movie_path}'])
         print(f"MovieMaker.image_to_movie: {time.time() - start} sec")
 
