@@ -19,6 +19,7 @@ class MovieConfig:
     input_image_dir: Path
     output_movie_path: Path
     width: int = 1280
+    height: int = 720
     image_type: str = 'png'
     frame_rate: int = 4
     max_frame_rate: int = 4
@@ -27,8 +28,12 @@ class MovieConfig:
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:
             raise ValueError(f'frame_rate should be less than {self.max_frame_rate}')
+        # Unity video player width and height should be even number.
         if self.width % 2 != 0:
             self.width += 1
+        if self.height % 2 != 0:
+            self.height += 1
+        # File format should be mp4.
         if self.output_movie_path.suffix != '.mp4':
             self.output_movie_path = Path(f"{self.output_movie_path}.mp4")
 

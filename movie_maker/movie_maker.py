@@ -4,11 +4,13 @@ import time
 from pathlib import Path
 from threading import Thread
 from typing import List
+from PIL import Image
 
 from source_converter import SourceConverter, GithubDownloader
 from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig, ImageConfig
 from movie_maker.config import MovieConfig
+from dataclasses import dataclass
 
 
 class MovieMaker:
@@ -41,11 +43,7 @@ class MovieMaker:
     def image_to_movie(movie_config: MovieConfig) -> None:
         """
         Create image_dir files to movie.
-        :param image_dir:
-        :param movie_path:
-        :param file_type: select input file type.
-        :param frame_rate: 1 or 2 frame get black screen. 3 or 4 is good.
-        :param width: movie width should be even number.
+        :param movie_config:
         :return None:
         """
         image_paths = sorted(movie_config.input_image_dir.glob(f'*.{movie_config.image_type}'))
@@ -132,28 +130,37 @@ class MovieMaker:
     @staticmethod
     def format_images(image_config: ImageConfig) -> Path:
         """
-        Get types of image paths. Resize image and convert to png.
+        Get types of image paths. Resize image and centering. Save as png.
         Format images.
         :param image_config:
-        :return:
+        :return: output_image_dir
         """
-        types = ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif', 'pdf']
+        types = ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif']
         image_paths = []
         for _type in types:
             image_paths.extend(list(image_config.image_dir.glob(f"*.{_type}")))
         output_image_dir = Path(f"{image_config.image_dir}/output")
         output_image_dir.mkdir(exist_ok=True)
-        for image_path in image_paths:
-            output_path = output_image_dir / f"{image_path.stem}.png"  # convert to png
-            # resize image.
-            subprocess.call(['convert', f'{image_path}',
-                             '-resize', f'{image_config.width}x{image_config.height}',
-                             '-quality', '100',
-                             f'{output_path}'])
-            # fit image width and height.
-            subprocess.call(['convert', f'{output_path}',
-                             '-background', 'black',
-                             '-extent', f'{image_config.width}x{image_config.height}',
-                             '-quality', '100',
-                             f'{output_path}'])
+        images = [Image.open(image_path) for image_path in image_paths]
+        new_image_paths = []
+        for i, image in enumerate(images):
+            background = Image.new('RGB', (image_config.width, image_config.height), (0, 0, 0))
+            # resize image. keep aspect ratio
+            image.thumbnail((image_config.width, image_config.height), Image.ANTIALIAS)
+            # centering
+            background.paste(image, (
+                int((image_config.width - image.width) / 2), int((image_config.height - image.height) / 2)))
+            new_path = output_image_dir.joinpath(f'{image_paths[i].stem}.png')
+            background.save(new_path, 'PNG')
+            new_image_paths.append(new_path)
         return output_image_dir
+
+
+@dataclass
+class ScreenshotResult:
+    """
+    Screenshot result.
+    """
+    image_paths: List[Path]
+    image_dir: Path
+    page_title: str

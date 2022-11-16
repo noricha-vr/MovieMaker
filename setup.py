@@ -12,6 +12,7 @@ setup(
         'selenium>=4.5.0',
         'webdriver-manager>=3.8.4',
         'source-converter>=0.1.14',
+        'Pillow>=9.3.0',
     ],
     url='https://github.com/noricha-vr/MovieMaker',
     extras_require={
