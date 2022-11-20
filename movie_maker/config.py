@@ -23,7 +23,7 @@ class MovieConfig:
     image_type: str = 'png'
     frame_rate: int = 4
     max_frame_rate: int = 4
-    encode_speed = 'medium'
+    encode_speed: str = 'medium'
 
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:

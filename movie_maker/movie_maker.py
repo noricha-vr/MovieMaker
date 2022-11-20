@@ -48,12 +48,13 @@ class MovieMaker:
         """
         subprocess.call(['ffmpeg',
                          '-i', f'{movie_config.input_image_dir}',
+                         '-framerate', f'{movie_config.frame_rate}',
                          '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
                          # Remove duplicate frames. It will be a too short movie.
                          # '-vf', 'mpdecimate,setpts=N/FRAME_RATE/TB',
                          '-c:v', 'h264',  # codec
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
-                         '-preset', movie_config.encode_speed,
+                         '-preset', f'{movie_config.encode_speed}',
                          '-tune', 'stillimage',  # tune for still image
                          '-y',  # overwrite output file
                          f'{movie_config.output_movie_path}'])
@@ -159,7 +160,6 @@ class MovieMaker:
             image_paths.extend(list(image_config.input_image_dir.glob(f"*.{_type}")))
         image_config.output_image_dir.mkdir(exist_ok=True)
         images = [Image.open(image_path) for image_path in image_paths]
-        new_image_paths = []
         for i, image in enumerate(images):
             background = Image.new('RGB', (image_config.width, image_config.height), (0, 0, 0))
             # resize image. keep aspect ratio
@@ -169,14 +169,3 @@ class MovieMaker:
                 int((image_config.width - image.width) / 2), int((image_config.height - image.height) / 2)))
             new_path = image_config.output_image_dir.joinpath(f'{image_paths[i].stem}.png')
             background.save(new_path, 'PNG')
-            new_image_paths.append(new_path)
-
-
-@dataclass
-class ScreenshotResult:
-    """
-    Screenshot result.
-    """
-    image_paths: List[Path]
-    image_dir: Path
-    page_title: str

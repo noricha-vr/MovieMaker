@@ -71,7 +71,7 @@ class TestMovieMaker:
         assert movie_path.exists(), 'Movie file is not created.'
 
     @pytest.mark.parametrize(('image_dir', 'length'), [
-        (Path('test_image'), 7),
+        (Path('input_image'), 7),
     ])
     def test_create_movie_from_image(self, image_dir, length):
         output_dir = image_dir.parent / 'output'
@@ -96,3 +96,13 @@ class TestMovieMaker:
         browser.driver.save_screenshot(str(browser.image_dir / 'test.png'))
         _page_lang = browser.driver.find_element(By.TAG_NAME, 'html').get_attribute('lang')
         assert _page_lang == page_lang, 'locale is mismatch'
+
+    @pytest.mark.parametrize(('input_movie_path'), [
+        Path('input_movie/js_video.mp4'),
+    ])
+    def test_to_vrc_movie(self, input_movie_path):
+        output_movie_path = input_movie_path.parent.parent / 'output' / 'video.mp4'
+        if output_movie_path.exists(): output_movie_path.unlink()
+        movie_config = MovieConfig(input_movie_path, output_movie_path, encode_speed='fast')
+        MovieMaker.to_vrc_movie(movie_config)
+        assert output_movie_path.exists(), 'Movie file is not created.'
