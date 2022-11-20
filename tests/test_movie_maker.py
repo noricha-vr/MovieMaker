@@ -74,13 +74,14 @@ class TestMovieMaker:
         (Path('test_image'), 7),
     ])
     def test_create_movie_from_image(self, image_dir, length):
-        shutil.rmtree(image_dir / 'output', ignore_errors=True)
-        image_config = ImageConfig(image_dir=image_dir)
-        output_image_dir = MovieMaker.format_images(image_config)
-        assert len(list(output_image_dir.glob("*"))) // image_config.fps == length, \
+        output_dir = image_dir.parent / 'output'
+        shutil.rmtree(output_dir, ignore_errors=True)
+        image_config = ImageConfig(input_image_dir=image_dir, output_image_dir=output_dir)
+        MovieMaker.format_images(image_config)
+        assert len(list(output_dir.glob("*"))) // image_config.fps == length, \
             'Image file counts does not match.'
         movie_path = Path(f'movie/{image_config.hash}.mp4')
-        movie_config = MovieConfig(output_image_dir, movie_path)
+        movie_config = MovieConfig(output_dir, movie_path)
         MovieMaker.image_to_movie(movie_config)
         assert movie_path.exists(), 'Movie file is not created.'
 

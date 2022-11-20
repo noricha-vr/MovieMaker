@@ -14,7 +14,7 @@ class MovieConfig:
     :param width: movie width.
     :param image_type: image file type.
     :param frame_rate: frame per second.
-    :param speed: 'veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'
+    :param encode_speed: 'veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'
     """
     input_image_dir: Path
     output_movie_path: Path
@@ -60,13 +60,14 @@ class BaseConfig(metaclass=ABCMeta):
 class ImageConfig(BaseConfig):
     """
     This class used to Input Image Config.
-    :param image_dir: image directory path.
+    :param input_image_dir: image directory path.
     :param width: image width.
     :param height: image height.
     :param max_width: max image width.
     :param max_height: max image height.
     """
-    image_dir: Path
+    input_image_dir: Path
+    output_image_dir: Path
     width: int = 1280
     height: int = 720
     # limit of image size.

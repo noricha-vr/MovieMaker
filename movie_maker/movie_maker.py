@@ -40,6 +40,25 @@ class MovieMaker:
         [thread.join() for thread in t]
 
     @staticmethod
+    def to_vrc_movie(movie_config) -> None:
+        """
+        Create image_dir files to movie.
+        :param movie_config:
+        :return None:
+        """
+        subprocess.call(['ffmpeg',
+                         '-i', f'{movie_config.input_image_dir}',
+                         '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
+                         # Remove duplicate frames. It will be a too short movie.
+                         # '-vf', 'mpdecimate,setpts=N/FRAME_RATE/TB',
+                         '-c:v', 'h264',  # codec
+                         '-pix_fmt', 'yuv420p',  # pixel format (color space)
+                         '-preset', movie_config.encode_speed,
+                         '-tune', 'stillimage',  # tune for still image
+                         '-y',  # overwrite output file
+                         f'{movie_config.output_movie_path}'])
+
+    @staticmethod
     def image_to_movie(movie_config: MovieConfig) -> None:
         """
         Create image_dir files to movie.
@@ -128,19 +147,17 @@ class MovieMaker:
         return image_dir
 
     @staticmethod
-    def format_images(image_config: ImageConfig) -> Path:
+    def format_images(image_config: ImageConfig) -> None:
         """
         Get types of image paths. Resize image and centering. Save as png.
         Format images.
         :param image_config:
-        :return: output_image_dir
         """
         types = ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif']
         image_paths = []
         for _type in types:
-            image_paths.extend(list(image_config.image_dir.glob(f"*.{_type}")))
-        output_image_dir = Path(f"{image_config.image_dir}/output")
-        output_image_dir.mkdir(exist_ok=True)
+            image_paths.extend(list(image_config.input_image_dir.glob(f"*.{_type}")))
+        image_config.output_image_dir.mkdir(exist_ok=True)
         images = [Image.open(image_path) for image_path in image_paths]
         new_image_paths = []
         for i, image in enumerate(images):
@@ -150,10 +167,9 @@ class MovieMaker:
             # centering
             background.paste(image, (
                 int((image_config.width - image.width) / 2), int((image_config.height - image.height) / 2)))
-            new_path = output_image_dir.joinpath(f'{image_paths[i].stem}.png')
+            new_path = image_config.output_image_dir.joinpath(f'{image_paths[i].stem}.png')
             background.save(new_path, 'PNG')
             new_image_paths.append(new_path)
-        return output_image_dir
 
 
 @dataclass
