@@ -1,9 +1,9 @@
 import os
 import glob
+import time
 from pathlib import Path
 import pytest
 import shutil
-
 from selenium.webdriver.common.by import By
 
 from movie_maker import BrowserConfig, MovieMaker, ImageConfig, BaseBrowser
@@ -98,10 +98,10 @@ class TestMovieMaker:
         assert _page_lang == page_lang, 'locale is mismatch'
 
     @pytest.mark.parametrize(('input_movie_path'), [
-        Path('input_movie/js_video.mp4'),
+        Path('input_movie/2s.mp4'),
     ])
     def test_to_vrc_movie(self, input_movie_path):
-        output_movie_path = input_movie_path.parent.parent / 'output' / 'video.mp4'
+        output_movie_path = input_movie_path.parent.parent / 'output' / input_movie_path.name
         if output_movie_path.exists(): output_movie_path.unlink()
         movie_config = MovieConfig(input_movie_path, output_movie_path, encode_speed='fast')
         MovieMaker.to_vrc_movie(movie_config)

@@ -11,6 +11,9 @@ from movie_maker.browser import BrowserCreator
 from movie_maker import BrowserConfig, ImageConfig
 from movie_maker.config import MovieConfig
 from dataclasses import dataclass
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class MovieMaker:
@@ -46,13 +49,15 @@ class MovieMaker:
         :param movie_config:
         :return None:
         """
-        subprocess.call(['ffmpeg',
-                         '-i', f'{movie_config.input_image_dir}',
-                         '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
-                         '-pix_fmt', 'yuv420p',  # pixel format (color space)
-                         '-tune', 'stillimage',  # tune for still image
-                         '-y',  # overwrite output file
-                         f'{movie_config.output_movie_path}'])
+        command = ['ffmpeg',
+                   '-i', f'{movie_config.input_image_dir}',
+                   # '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
+                   '-c:v', 'copy',  # codec
+                   '-pix_fmt', 'yuv420p',  # pixel format (color space)
+                   '-y',  # overwrite output file
+                   f'{movie_config.output_movie_path}']
+        logger.info(f'command: {command}')
+        subprocess.call(command)
 
     @staticmethod
     def image_to_movie(movie_config: MovieConfig) -> None:
