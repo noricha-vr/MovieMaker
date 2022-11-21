@@ -48,13 +48,8 @@ class MovieMaker:
         """
         subprocess.call(['ffmpeg',
                          '-i', f'{movie_config.input_image_dir}',
-                         '-framerate', f'{movie_config.frame_rate}',
                          '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
-                         # Remove duplicate frames. It will be a too short movie.
-                         # '-vf', 'mpdecimate,setpts=N/FRAME_RATE/TB',
-                         '-c:v', 'h264',  # codec
                          '-pix_fmt', 'yuv420p',  # pixel format (color space)
-                         '-preset', f'{movie_config.encode_speed}',
                          '-tune', 'stillimage',  # tune for still image
                          '-y',  # overwrite output file
                          f'{movie_config.output_movie_path}'])
