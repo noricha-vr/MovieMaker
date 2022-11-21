@@ -103,6 +103,6 @@ class TestMovieMaker:
     def test_to_vrc_movie(self, input_movie_path):
         output_movie_path = input_movie_path.parent.parent / 'output' / input_movie_path.name
         if output_movie_path.exists(): output_movie_path.unlink()
-        movie_config = MovieConfig(input_movie_path, output_movie_path, encode_speed='fast')
+        movie_config = MovieConfig(input_movie_path, output_movie_path)
         MovieMaker.to_vrc_movie(movie_config)
         assert output_movie_path.exists(), 'Movie file is not created.'
