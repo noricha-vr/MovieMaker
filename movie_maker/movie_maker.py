@@ -51,8 +51,8 @@ class MovieMaker:
         """
         command = ['ffmpeg',
                    '-i', f'{movie_config.input_image_dir}',
-                   # '-vf', f"scale='min({movie_config.width},iw)':-2",  # iw is input width, -2 is auto height
-                   '-c:v', 'copy',  # codec
+                   '-c:v', 'copy',  # copy codec(video)
+                   '-c:a', 'copy',  # copy audio
                    '-pix_fmt', 'yuv420p',  # pixel format (color space)
                    '-y',  # overwrite output file
                    f'{movie_config.output_movie_path}']
