@@ -12,9 +12,11 @@ class MovieConfig:
     :param input_image_dir: image directory path.
     :param output_movie_path: output movie file path.
     :param width: movie width.
+    :param height: movie height.
     :param image_type: image file type.
     :param frame_rate: frame per second.
     :param encode_speed: 'veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'
+    :param audio: True or False, default is True
     """
     input_image_dir: Path
     output_movie_path: Path
@@ -24,6 +26,7 @@ class MovieConfig:
     frame_rate: int = 4
     max_frame_rate: int = 4
     encode_speed: str = 'medium'
+    audio = True
 
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:
