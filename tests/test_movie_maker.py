@@ -99,10 +99,13 @@ class TestMovieMaker:
 
     @pytest.mark.parametrize(('input_movie_path'), [
         Path('input_movie/2s.mp4'),
+        Path('input_movie/with_audio.mp4'),
     ])
     def test_to_vrc_movie(self, input_movie_path):
         output_movie_path = input_movie_path.parent.parent / 'output' / input_movie_path.name
         if output_movie_path.exists(): output_movie_path.unlink()
         movie_config = MovieConfig(input_movie_path, output_movie_path)
+        start = time.time()
         MovieMaker.to_vrc_movie(movie_config)
+        print(f'elapsed time: {time.time() - start}')
         assert output_movie_path.exists(), 'Movie file is not created.'

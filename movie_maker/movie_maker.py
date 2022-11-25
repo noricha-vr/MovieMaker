@@ -52,7 +52,7 @@ class MovieMaker:
         command = ['ffmpeg',
                    '-i', f'{movie_config.input_image_dir}',
                    '-c:v', 'copy',  # copy codec(video)
-                   '-c:a', 'copy',  # copy audio
+                   '-c:a', 'aac',
                    '-pix_fmt', 'yuv420p',  # pixel format (color space)
                    '-y',  # overwrite output file
                    f'{movie_config.output_movie_path}']

@@ -93,6 +93,7 @@ class BrowserConfig(BaseConfig):
     :param page_height: page height.
     :param scroll: scroll.
     :param traget: select target file name or type.
+    :param wait_time: wait time in seconds
     :param lang: browser language.
     :param max_width: max browser width.
     :param max_height: max browser height.
@@ -109,6 +110,7 @@ class BrowserConfig(BaseConfig):
     scroll: int = 200
     lang: str = 'en-US'
     targets: List[str] = None
+    wait_time: int = 1
     # limits for browser
     min_scroll = 200
     min_page_height = 3000
