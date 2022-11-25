@@ -124,6 +124,5 @@ class BaseBrowser(metaclass=abc.ABCMeta):
                         EC.presence_of_element_located((By.XPATH, params["xpath"])))
                 except Exception as e:
                     logger.warning(e)
-            if "sleep" in params:
-                time.sleep(params["sleep"])
+            time.sleep(self.browser_config.wait_time)
             return

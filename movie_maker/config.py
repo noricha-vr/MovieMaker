@@ -119,7 +119,7 @@ class BrowserConfig(BaseConfig):
     max_height = 1920
     # driver settings
     driver_path = Path(__file__).parent
-    page_load_timeout = 20
+    page_load_timeout = 30
     # set in __post_init__
     locale: str = 'en_US'
 
