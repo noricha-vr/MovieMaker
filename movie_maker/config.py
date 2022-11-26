@@ -26,7 +26,7 @@ class MovieConfig:
     frame_rate: int = 4
     max_frame_rate: int = 4
     encode_speed: str = 'medium'
-    has_audio = True
+    has_audio: bool = True
 
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:
