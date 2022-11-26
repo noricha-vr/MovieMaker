@@ -3,6 +3,7 @@ from typing import List
 from movie_maker.browser import BaseBrowser
 
 
+# TODO remove this class
 class GeneralBrowser(BaseBrowser):
 
     def take_multi_page_screenshots(self, urls: List[str]) -> List[str]:

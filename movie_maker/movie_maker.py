@@ -46,16 +46,20 @@ class MovieMaker:
     def to_vrc_movie(movie_config) -> None:
         """
         Create image_dir files to movie.
+        If audio is False, remove audio from movie.
         :param movie_config:
         :return None:
         """
-        command = ['ffmpeg',
-                   '-i', f'{movie_config.input_image_dir}',
-                   '-c:v', 'copy',  # copy codec(video)
-                   '-c:a', 'aac',
-                   '-pix_fmt', 'yuv420p',  # pixel format (color space)
-                   '-y',  # overwrite output file
-                   f'{movie_config.output_movie_path}']
+        audio_setting = ['-c:a', 'aac', '-strict', '-2'] if movie_config.has_audio else ['-an']
+        command = [
+                      'ffmpeg',
+                      '-i', f'{movie_config.input_image_dir}',
+                      '-c:v', 'copy',  # copy codec(video)
+                  ] + audio_setting + [
+                      '-pix_fmt', 'yuv420p',  # pixel format (color space)
+                      '-y',  # overwrite output file
+                      f'{movie_config.output_movie_path}'
+                  ]
         logger.info(f'command: {command}')
         subprocess.call(command)
 

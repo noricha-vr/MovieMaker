@@ -4,11 +4,13 @@ import time
 from pathlib import Path
 import pytest
 import shutil
+import logging
 from selenium.webdriver.common.by import By
 
 from movie_maker import BrowserConfig, MovieMaker, ImageConfig, BaseBrowser
 from movie_maker.config import MovieConfig
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 for folder in glob.glob("image/*"): shutil.rmtree(folder)
 for file in glob.glob("movie/*.mp4"): os.remove(file)
 
@@ -97,15 +99,20 @@ class TestMovieMaker:
         _page_lang = browser.driver.find_element(By.TAG_NAME, 'html').get_attribute('lang')
         assert _page_lang == page_lang, 'locale is mismatch'
 
-    @pytest.mark.parametrize(('input_movie_path'), [
-        Path('input_movie/2s.mp4'),
-        Path('input_movie/with_audio.mp4'),
+    @pytest.mark.parametrize(('input_movie_path', 'has_audio'), [
+        [Path('input_movie/2s.mp4'), True],
+        [Path('input_movie/with_audio.mp4'), True],
+        [Path('input_movie/remove_audio.mp4'), False],
     ])
-    def test_to_vrc_movie(self, input_movie_path):
+    def test_to_vrc_movie(self, input_movie_path, has_audio):
         output_movie_path = input_movie_path.parent.parent / 'output' / input_movie_path.name
         if output_movie_path.exists(): output_movie_path.unlink()
         movie_config = MovieConfig(input_movie_path, output_movie_path)
+        movie_config.has_audio = has_audio
         start = time.time()
         MovieMaker.to_vrc_movie(movie_config)
         print(f'elapsed time: {time.time() - start}')
         assert output_movie_path.exists(), 'Movie file is not created.'
+        # Check movie file size.
+        assert output_movie_path.stat().st_size > input_movie_path.stat().st_size / 2, \
+            'Movie file size is too small.'

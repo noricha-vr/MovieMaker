@@ -16,7 +16,7 @@ class MovieConfig:
     :param image_type: image file type.
     :param frame_rate: frame per second.
     :param encode_speed: 'veryslow', 'slower', 'slow', 'medium', 'fast', 'faster', 'veryfast', 'superfast', 'ultrafast'
-    :param audio: True or False, default is True
+    :param has_audio: export with audio or not. default is True
     """
     input_image_dir: Path
     output_movie_path: Path
@@ -26,7 +26,7 @@ class MovieConfig:
     frame_rate: int = 4
     max_frame_rate: int = 4
     encode_speed: str = 'medium'
-    audio = True
+    has_audio = True
 
     def __post_init__(self):
         if self.frame_rate > self.max_frame_rate:
