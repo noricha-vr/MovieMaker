@@ -98,6 +98,7 @@ class BrowserConfig(BaseConfig):
     :param max_width: max browser width.
     :param max_height: max browser height.
     :param max_page_height: max page height.
+    :param max_file_count: max file count.
     :param min_scroll: min scroll.
     :param driver: driver path.
     :param page_load_timeout: page load timeout.
@@ -115,6 +116,7 @@ class BrowserConfig(BaseConfig):
     min_scroll = 200
     min_page_height = 3000
     max_page_height = 100000
+    max_file_count = 50
     max_width = 1920
     max_height = 1920
     # driver settings

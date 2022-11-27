@@ -122,7 +122,7 @@ class MovieMaker:
         try:
             # Take multi files screenshots.
             browser = BrowserCreator(browser_config).create_browser()
-            for html_path in file_paths:
+            for html_path in file_paths[:browser_config.max_file_count]:
                 browser.open(f"file://{html_path.absolute()}")
                 image_dir = browser.take_screenshots()
         except Exception as e:
