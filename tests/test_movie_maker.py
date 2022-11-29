@@ -88,13 +88,16 @@ class TestMovieMaker:
         assert movie_path.exists(), 'Movie file is not created.'
 
     @pytest.mark.parametrize(('url', 'lang', 'page_lang'), [
-        ("https://pypi.org/", 'ja-JP', 'ja'),
-        ("https://pypi.org/", 'en-US', 'en'),
+        ("https://twitter.com/home", 'zh', 'zh'),
+        ("https://twitter.com/home", 'ja-JP', 'ja'),
+        ("https://twitter.com/home", 'en-US', 'en'),
+        ("https://twitter.com/home", 'ko', 'ko'),
     ])
     def test_switch_locale(self, url, lang, page_lang):
         browser_config = BrowserConfig(url, page_height=720, lang=lang)
         browser = BaseBrowser(browser_config)
         browser.driver.get(browser_config.url)
+        browser.wait()
         browser.driver.save_screenshot(str(browser.image_dir / 'test.png'))
         _page_lang = browser.driver.find_element(By.TAG_NAME, 'html').get_attribute('lang')
         assert _page_lang == page_lang, 'locale is mismatch'

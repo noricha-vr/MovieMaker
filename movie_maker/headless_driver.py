@@ -15,6 +15,7 @@ def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver:
     """
     # Set locale
     os.environ['LANG'] = f'{browser_config.locale}.UTF-8'
+    os.environ['LC_ALL'] = f'{browser_config.locale}.UTF-8'
     # The following options are required to make headless Brave
     # Works in a Docker container
     chrome_options = webdriver.ChromeOptions()
