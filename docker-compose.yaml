@@ -3,5 +3,6 @@ services:
   movie_maker:
     container_name: 'movie_maker'
     image: 'movie_maker'
+    build: .
     volumes:
       - .:/app
