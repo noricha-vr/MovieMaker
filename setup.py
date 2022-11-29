@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vrc-movie-maker",
-    version="0.2.8",
+    version="0.2.9",
     license='MIT',
     author="Noricha",
     author_email="noricha.vr@gmail.com",
