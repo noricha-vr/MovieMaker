@@ -27,3 +27,5 @@ RUN python -m pip install --upgrade pip && pip install -r requirements.txt
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . .
+# Install ChromeDriver at test dir.
+RUN cd tests && python -m webdriver_manager.chrome install
