@@ -25,6 +25,6 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Install my-module
-      run: cd movie_maker && pip install .
+      run: pip install .
     - name: Test with pytest
       run: pytest
