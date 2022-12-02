@@ -1,7 +1,7 @@
 # Use the official Python image.
 # https://hub.docker.com/_/python
-FROM python:3.8-buster
 
+FROM python:3.10-buster
 # fonts-takao-*                             # jp (Japanese) fonts
 # ttf-wqy-microhei fonts-wqy-microhei       # kr (Korean) fonts
 # fonts-arphic-ukai fonts-arphic-uming      # cn (Chinese) fonts
@@ -15,9 +15,17 @@ RUN apt-get update && apt-get install -y  \
     fonts-takao-* ttf-wqy-microhei fonts-wqy-microhei \
     fonts-arphic-ukai fonts-arphic-uming
 
-# Install Chrome
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+# Install Brave
+RUN apt-get update && apt-get install -y curl && \
+    curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc | apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add - && \
+    sh -c 'echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com `lsb_release -sc` main" >> /etc/apt/sources.list.d/brave.list' && \
+    apt-get update && apt-get install -y brave-browser
+
+# Install Chrome Driver
+RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
+    && curl https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip -o /tmp/chromedriver.zip \
+    && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
+    && rm /tmp/chromedriver.zip
 
 # Install Python dependencies.
 COPY requirements.txt requirements.txt
@@ -27,5 +35,3 @@ RUN python -m pip install --upgrade pip && pip install -r requirements.txt
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . .
-# Install ChromeDriver at test dir.
-RUN cd tests && python -m webdriver_manager.chrome install
