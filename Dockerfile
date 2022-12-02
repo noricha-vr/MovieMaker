@@ -15,17 +15,15 @@ RUN apt-get update && apt-get install -y  \
     fonts-takao-* ttf-wqy-microhei fonts-wqy-microhei \
     fonts-arphic-ukai fonts-arphic-uming
 
-# Install Brave
-RUN apt-get update && apt-get install -y curl && \
-    curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc | apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add - && \
-    sh -c 'echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com `lsb_release -sc` main" >> /etc/apt/sources.list.d/brave.list' && \
-    apt-get update && apt-get install -y brave-browser
-
-# Install Chrome Driver
-RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
-    && curl https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip -o /tmp/chromedriver.zip \
-    && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
-    && rm /tmp/chromedriver.zip
+# Install Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install \
+    && rm google-chrome-stable_current_amd64.deb
+# Download and extract the latest version of ChromeDriver
+RUN CHROME_DRIVER_VERSION=$(curl -sL "https://chromedriver.storage.googleapis.com/LATEST_RELEASE") && \
+    curl -sL "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip" > chromedriver.zip && \
+    unzip chromedriver.zip -d /usr/local/bin && \
+    rm chromedriver.zip
 
 # Install Python dependencies.
 COPY requirements.txt requirements.txt
