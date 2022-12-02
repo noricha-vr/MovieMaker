@@ -17,7 +17,6 @@ def create_headless_chromedriver(browser_config: BrowserConfig) -> webdriver:
     # The following options are required to make headless Brave
     # Works in a Docker container
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = '/usr/bin/brave-browser'
     chrome_options.add_argument("--headless")
     chrome_options.add_argument(f"--lang={browser_config.lang}")
     chrome_options.add_argument("--disable-gpu")
