@@ -60,8 +60,8 @@ class TestMovieMaker:
         assert movie_path.exists(), 'Movie file is not created.'
 
     @pytest.mark.parametrize(('url', 'targets', 'length'), [
-        ('https://github.com/noricha-vr/source_converter', ['*.md', '*.py', ], 22),
-        ('https://github.com/vrchat-community/UdonSharp', ['*.md,*.asset', '*.cs'], 965),
+        ('https://github.com/noricha-vr/source_converter', ['*.md', '*.py', ], 25),
+        ('https://github.com/vrchat-community/UdonSharp', ['*.asset', '*.cs'], 984),
     ])
     def test_create_github_movie(self, url, targets, length):
         browser_config = BrowserConfig(url, targets=targets, wait_time=0)
