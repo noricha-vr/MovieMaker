@@ -25,4 +25,4 @@ jobs:
           docker build -t web_screen .
       - name: Move to tests directory
         run: |
-          docker run web_screen sh -c "cd /app/tests && pytest"
+          docker run web_screen sh -c "pip install . && cd /app/tests && pytest"
