@@ -2,7 +2,7 @@ name: Python application
 
 on:
   push:
-    branches: [ 'master', 'dev' ]
+    branches: [ 'master' ]
   pull_request:
     branches: [ "master" ]
 
@@ -21,7 +21,7 @@ jobs:
           python-version: "3.10"
       - name: Build docker image
         run: |
-          docker build -t web_screen .
-      - name: Move to tests directory
+          docker build -t movie_maker .
+      - name: test movie_maker
         run: |
-          docker run web_screen sh -c "pip install . && cd /app/tests && pytest"
+          docker run movie_maker sh -c "pip install . && cd /app/tests && pytest"
