@@ -39,7 +39,7 @@ class MovieConfig:
         # File format should be mp4.
         if self.output_movie_path.suffix != '.mp4':
             self.output_movie_path = Path(f"{self.output_movie_path}.mp4")
-        movie_path.parent.mkdir(exist_ok=True, parents=True)
+        self.output_movie_path.parent.mkdir(exist_ok=True, parents=True)
 
 
 class BaseConfig(metaclass=ABCMeta):

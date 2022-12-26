@@ -158,10 +158,15 @@ class MovieMaker:
         Format images.
         :param image_config:
         """
-        types = ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'tiff', 'tif', 'svg', 'avif']
+        types = ['.jpg', '.jpeg', '.png', '.webp', '.bmp', '.tiff', '.tif', '.svg', '.avif']
         image_paths = []
-        for _type in types:
-            image_paths.extend(list(image_config.input_image_dir.glob(f"*.{_type}")))
+        # Get image paths.
+        for path in image_config.input_image_dir.glob("*"):
+            suffix = path.suffix.lower()
+            if suffix not in types: continue
+            image_paths.append(path)
+        if len(image_paths) == 0:
+            raise Exception(f"No image files in {image_config.input_image_dir.absolute()}")
         image_config.output_image_dir.mkdir(exist_ok=True)
         images = [Image.open(image_path) for image_path in image_paths]
         for i, image in enumerate(images):

@@ -63,7 +63,7 @@ class TestMovieMaker:
         ('https://github.com/noricha-vr/source_converter', ['*.md', '*.py', ], 25),
         ('https://github.com/vrchat-community/UdonSharp', ['*.asset', '*.cs'], 984),
     ])
-    def test_create_github_movie(self, url, targets, length):
+    def test_github_to_movie(self, url, targets, length):
         browser_config = BrowserConfig(url, targets=targets, wait_time=0)
         image_dir = MovieMaker.take_screenshots_github_files(browser_config)
         assert len(list(image_dir.glob('*.png'))) // browser_config.fps == length, 'Image file counts does not match.'
@@ -75,7 +75,7 @@ class TestMovieMaker:
     @pytest.mark.parametrize(('image_dir', 'length'), [
         (Path('input_image'), 7),
     ])
-    def test_create_movie_from_image(self, image_dir, length):
+    def test_image_to_movie(self, image_dir, length):
         output_dir = image_dir.parent / 'output'
         shutil.rmtree(output_dir, ignore_errors=True)
         image_config = ImageConfig(input_image_dir=image_dir, output_image_dir=output_dir)
